@@ -1,0 +1,33 @@
+Proposed Database Structure
+
+User-
+id-text //key
+type-text
+
+Project-
+id-number //key
+name-text
+blackbook-text(link)
+code-text(link)
+guideid-number
+userid-number
+other_details-text
+
+Guide-
+guide_id-text //key
+guide_name- text
+project_count-number
+
+Student-
+student_id-text //key
+student_name-text
+project_id-number
+guide_id-number
+batch-number(year)
+
+Admin-
+admin_id-text //key
+admin_name-text
+
+Project-
+project_id-text //key
