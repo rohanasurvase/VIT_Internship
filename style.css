@@ -1,0 +1,24 @@
+/*body{
+  padding-top: 25vh;
+}*/
+.form-container{
+	/*display: flex;*/
+	/*justify-content: center;*/
+	/*align-items: center;*/
+  /*text-align: center;*/
+  /*padding: 30px;*/
+}
+
+
+h1{
+	text-align: center;
+}
+
+#formFooter{
+  text-align: center;
+}
+input,label{
+	display: block;
+
+}
+
