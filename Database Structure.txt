@@ -31,8 +31,6 @@ Admin-
 admin_id-text //key
 admin_name-text
 
-<<<<<<< HEAD
-=======
 Group-
 group_id-text //key
 group_member_count-number
@@ -40,4 +38,4 @@ group_member_ids-text
 group_member_names-text
 guide_id-text
 project_id-number
->>>>>>> 554d3006d9d19fbe4474af8d4f47c9035adff8b9
+
