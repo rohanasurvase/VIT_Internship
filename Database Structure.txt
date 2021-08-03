@@ -12,11 +12,13 @@ code-text(link)
 guideid-number
 userid-number
 other_details-text
+group_id-text
 
 Guide-
 guide_id-text //key
 guide_name- text
 project_count-number
+group_ids-text
 
 Student-
 student_id-text //key
@@ -29,5 +31,10 @@ Admin-
 admin_id-text //key
 admin_name-text
 
-Project-
-project_id-text //key
+Group-
+group_id-text //key
+group_member_count-number
+group_member_ids-text
+group_member_names-text
+guide_id-text
+project_id-number
