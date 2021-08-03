@@ -29,5 +29,3 @@ Admin-
 admin_id-text //key
 admin_name-text
 
-Project-
-project_id-text //key
