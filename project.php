@@ -8,7 +8,27 @@
 	<title>Homepage</title>
 </head>
 <body>
-	<!-- Nav Bar -->
+	<header>
+		<?php
+			include('./PHP/header.php');
+		?>
+	</header>
+	<?php
+		include('./PHP/connect.php');
+		$row='';
+		$sql = "SELECT * FROM project where pro_id=".$_GET['id']."";
+		// $result = mysqli_query($conn, $sql);20
+		// echo("ABC ".$result);
+		if ($result = mysqli_query($connection,$sql)) {
+		  $row = mysqli_fetch_assoc($result);
+		  #echo($row['Pro_id']);
+		  // Free result set
+		  mysqli_free_result($result);
+		}else{
+			//query fails
+			echo("Yo");
+		}
+	?>
 	<div class="project-details">
 		<div class="jumbotron">
 			<div class="container">
