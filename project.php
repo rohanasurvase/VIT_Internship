@@ -10,13 +10,13 @@
 <body>
 	<header>
 		<?php
-			include('./PHP/header.php');
+			// include('./PHP/header.php');
 		?>
 	</header>
 	<?php
 		include('./PHP/connect.php');
 		$row='';
-		$sql = "SELECT * FROM project where pro_id=".$_GET['id']."";
+		$sql = "SELECT * FROM project where project_id=".$_GET['id']."";
 		// $result = mysqli_query($conn, $sql);20
 		// echo("ABC ".$result);
 		if ($result = mysqli_query($connection,$sql)) {
@@ -106,7 +106,51 @@
 					</tr>
 				</tbody>
 			</table>
-			<button type="button" class="btn btn-primary">Upload File</button>
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				    <div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Modal title</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							  <span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+				      	<div class="modal-body">
+				      		<form action="upload.php" method="POST" enctype="multipart/form-data" class="d-flex justify-content-stretch w-100">
+				      			<div class="input-group mb-3">
+				      			  <div class="custom-file">
+				      			    <input type="file" name='file' class="custom-file-input" id="fileInput" onchange="displayFile()">
+				      			    <label class="custom-file-label" for="fileInput">Choose file</label>
+				      			  </div>
+				      			  <div class="input-group-append">
+				      			    <button type="submit" class="btn input-group-text" name="submit" id="submit">Upload</span>
+				      			  </div>
+				      			</div>
+				      		</form>
+				      		<div id="display_file_name">
+				      			
+				      		</div>
+				      	</div>
+				      	<div class="modal-footer">
+					        <!-- 
+					        	<input type="file" name="fileToUpload" id="fileToUpload" >
+					        	<input type="submit" class="btn btn-success" value="Upload File" name="submit">
+					        </form> -->
+					        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+					        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+				      	</div>
+				    </div>
+			  	</div>
+			</div>
+			<!-- <div class="upload-dialog hide">
+				Accept File Input
+				<form action="upload.php" method="post" enctype="multipart/form-data">
+				  Select image to upload:
+				  <input type="file" name="fileToUpload" id="fileToUpload" >
+				  <input type="submit" value="Upload File" name="submit">
+				</form>
+			</div> -->
+			<button type="button" class="upload-btn btn btn-primary" data-toggle="modal" data-target="#exampleModal">Upload Files</button>
 					
 		</div>
 	</div>
@@ -153,12 +197,13 @@
 			</div>
 		 	 <!-- Footer Links -->
 			<div class="text-center py-3">
-				<a href="vit.edu.in/">Vidyalankar Institute of Technology</a>
+				<a href="https://www.vit.edu.in/">Vidyalankar Institute of Technology</a>
 		  	</div>
 		</div>
 	</footer>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>	
+	<script src="./JS/project_script.js"></script>
 </body>
 </html>

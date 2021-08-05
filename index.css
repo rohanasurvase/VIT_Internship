@@ -4,3 +4,9 @@ body{
 .jumbotron{
 	height: 100%;
 }
+#dropdownMenuButton,#search-input{
+	padding: 0.5em 0;
+}
+#search-input{
+	width: 45%;
+}
