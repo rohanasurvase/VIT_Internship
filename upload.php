@@ -1,5 +1,4 @@
 <?php
-	
 	if(isset($_POST['submit'])){
 		//The File
 		$file=$_FILES['file'];	
@@ -25,6 +24,7 @@
 					$fileNameNew = uniqid('',true).'.'.$fileActualExt;
 					$target_dir = "Uploads/".$fileNameNew;
 					move_uploaded_file($fileTemp, $target_dir);
+					header('Location: project.php?uploadsuccess');
 					echo 
 					'<div class="alert alert-success" role="alert"> SUCCESS!
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">

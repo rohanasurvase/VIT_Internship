@@ -10,22 +10,10 @@ const displayFile=()=>{
 	let input_files=ids('fileInput');
 	for(let i of input_files.files){
 		let reader= new FileReader();
-		ids('display_file_name').innerText=i.name;
-		/*reader.onload=()=>{
-			//Create Image tag
-			let img=document.createElement('img');
-			img.classList.add('display');
-			//set src attribute of image to the result/input File
-			img.setAttribute('src', reader.result);
-			//insertBefore as onload part gets executed after the outer code statements and we needed image above caption
-			figure.insertBefore(img,figcap);			
-		}*/
+		//ids('display_file_name').innerText=i.name;
+		let src= URL.createObjectURL(i);
+		 ids('display_file_name').innerHTML+=`<a href="${src}" target="_blank">${i.name}</a><br>`;
 		reader.readAsDataURL(i)	
 	}	
 }
 
-
-// classes('upload-btn')[0].addEventListener('click',()=>{
-// 	classes('upload-dialog')[0].classList.remove('hide');
-// 	classes('upload-dialog')[0].classList.add('display');
-// });

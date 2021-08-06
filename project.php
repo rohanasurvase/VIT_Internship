@@ -8,11 +8,11 @@
 	<title>Homepage</title>
 </head>
 <body>
-	<header>
+	<!-- <header> -->
 		<?php
-			// include('./PHP/header.php');
+			require('./PHP/header.php');
 		?>
-	</header>
+	<!-- </header> -->
 	<?php
 		include('./PHP/connect.php');
 		$row='';
@@ -29,6 +29,38 @@
 			echo("Yo");
 		}
 	?>
+	<!-- File Uploaded Successfully Modal -->
+	<div class="modal fade" id="success-modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content bg-success text-white">
+	      <div class="modal-header">
+	        <h5 class="modal-title">Success</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <p>The File was successfully uploaded!</p>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Error Modal -->
+	<div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content bg-danger text-white">
+	      <div class="modal-header">
+	        <h5 class="modal-title">Error!</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <p id='error-text'></p>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	<div class="project-details">
 		<div class="jumbotron">
 			<div class="container">
@@ -116,10 +148,10 @@
 							</button>
 						</div>
 				      	<div class="modal-body">
-				      		<form action="upload.php" method="POST" enctype="multipart/form-data" class="d-flex justify-content-stretch w-100">
+				      		<form method="POST" enctype="multipart/form-data" class="d-flex justify-content-stretch w-100">
 				      			<div class="input-group mb-3">
 				      			  <div class="custom-file">
-				      			    <input type="file" name='file' class="custom-file-input" id="fileInput" onchange="displayFile()">
+				      			    <input type="file" name='file' class="custom-file-input" id="fileInput" onchange="displayFile()" multiple>
 				      			    <label class="custom-file-label" for="fileInput">Choose file</label>
 				      			  </div>
 				      			  <div class="input-group-append">
@@ -131,25 +163,9 @@
 				      			
 				      		</div>
 				      	</div>
-				      	<div class="modal-footer">
-					        <!-- 
-					        	<input type="file" name="fileToUpload" id="fileToUpload" >
-					        	<input type="submit" class="btn btn-success" value="Upload File" name="submit">
-					        </form> -->
-					        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-					        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-				      	</div>
 				    </div>
 			  	</div>
 			</div>
-			<!-- <div class="upload-dialog hide">
-				Accept File Input
-				<form action="upload.php" method="post" enctype="multipart/form-data">
-				  Select image to upload:
-				  <input type="file" name="fileToUpload" id="fileToUpload" >
-				  <input type="submit" value="Upload File" name="submit">
-				</form>
-			</div> -->
 			<button type="button" class="upload-btn btn btn-primary" data-toggle="modal" data-target="#exampleModal">Upload Files</button>
 					
 		</div>
@@ -163,47 +179,73 @@
 			</ul>
 		</div>
 	</div>
-	<footer class="page-footer">
-		<div class="container">
-			<div class="text-center text-md-left">
-			    <!-- Grid row -->
-			    <div class="row">
-			    	<!-- Grid column -->
-					<div class="col-md-6 mt-md-0 mt-3">
-						<!-- Content -->
-						<h5 class="text-uppercase">VIT Project Hub</h5>
-						<p>A Single Place for all Final Year Projects!</p>
-					</div>
-					<!-- Grid column -->
-				    <!-- Grid column -->
-				    <div class="col-md-6 mb-md-0 mb-3">
-				        <!-- Links -->
-				        <h5 class="text-uppercase text-right">Other Links</h5>
-				        <ul class="list-unstyled text-right">
-							<li>
-								<a href="https://www.vit.edu.in" target="_blank">College Website</a>
-							</li>
-							<li>
-								<a href="https://erp.mycollege.edu.in" target="_blank">ERP</a>
-							</li>
-							<li>
-								<a href="#!">VLive</a>
-							</li>
-				        </ul>
-			    	</div>
-			      <!-- Grid column -->
-			    </div>
-			    <!-- Grid row -->
-			</div>
-		 	 <!-- Footer Links -->
-			<div class="text-center py-3">
-				<a href="https://www.vit.edu.in/">Vidyalankar Institute of Technology</a>
-		  	</div>
-		</div>
-	</footer>
+	<?php
+		require('./PHP/footer.php');
+	?>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>	
 	<script src="./JS/project_script.js"></script>
 </body>
 </html>
+<!-- File Upload Code -->
+<?php
+	if(isset($_POST['submit'])){
+		//The File
+		$file=$_FILES['file'];	
+		// File Name
+		$fileName=$_FILES['file']['name'];
+		// File temporary Name
+		$fileTemp=$_FILES['file']['tmp_name'];
+		// File Size
+		$fileSize=$_FILES['file']['size'];
+		//File Error
+		$fileError=$_FILES['file']['error'];
+		//Type
+		$fileType=$_FILES['file']['type'];
+		//Extension
+		$fileExt=explode('.', $fileName);
+		$fileActualExt=strtolower(end($fileExt));
+		//Allowed Extensions
+		$allowed=array('html','css','js','java','pdf','docx','doc','png','jpeg','jpg','odf','xlsx');
+		//Check for extension
+		if(in_array($fileActualExt,$allowed)){
+			//If no error in file upload
+			if($fileError === 0){
+				// FileSize less than 15 MB
+				if($fileSize < 15000000){
+					//Creates unique ID based on the current microseconds
+					$fileNameNew = uniqid('',true).'.'.$fileActualExt;
+					$target_dir = "Uploads/".$fileNameNew;
+					move_uploaded_file($fileTemp, $target_dir);
+					echo 
+					"<script>$('#success-modal').modal()</script>";
+				}
+				/*If File size exceeds 15 mb*/
+				else{
+					echo'
+					<script>
+						document.getElementById("error-text").innerText="Your File is too big: '.$fileSize.' kbs";
+						$("#error-modal").modal()
+					</script>
+					';
+				}
+			}else{
+				echo'
+					<script>
+						document.getElementById("error-text").innerText="Error in uploading file.";
+						$("#error-modal").modal()
+					</script>
+					';
+			}
+
+		}else{
+			echo'
+				<script>
+					document.getElementById("error-text").innerText="Invalid File Type.";
+					$("#error-modal").modal()
+				</script>
+			';
+		}
+	}
+?>
