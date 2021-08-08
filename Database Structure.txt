@@ -7,10 +7,12 @@ type-text
 Project-
 id-number //key
 name-text
+description-text
 blackbook-text(link)
 code-text(link)
+research_paper-text(link)
 guideid-number
-userid-number
+//userid-number
 other_details-text
 group_id-text
 
@@ -21,9 +23,10 @@ project_count-number
 group_ids-text
 
 Student-
+image-text(link)
 student_id-text //key
 student_name-text
-project_id-number
+group_id-number
 guide_id-number
 batch-number(year)
 

@@ -76,20 +76,21 @@
 				
 				<hr class="my-4">
 				<p class="lead">
-					<!-- Black Book -->
-					<a class="btn btn-primary btn-lg" href="#" role="button">Project Report</a>
+					<!-- If project is hosted or stored on Github -->
+					<a class="btn btn-primary btn-lg" href="#" role="button">View Project</a>
 				</p>
 			</div>
 		</div>
 	</div>
 	<div class="team-details">
-		<div class="container">
+		<div class="container pb-5">
 			<h2>Team Profile</h2>
 			<!-- Guide Name -->
-			<p>Project Guide: </p>
+			<h5>Project Guide: </h5>
 			<p>Prof. Deepali Shrikhande</p>
+			<hr>
 			<!-- Group Member names -->
-			<p>Group Members:</p>
+			<h5>Group Members:</h5>
 				<p>Shardul Birje, 19101A2001</p>
 				<p>Rohana Survase, 19101A2003</p>
 				<p>Sayali Khamgaonkar, 19101A2005</p>
@@ -119,7 +120,7 @@
 						<td>
 							<!-- <button type="button" class="btn btn-primary">Upload</button> -->
 							<button type="button" class="btn btn-success">Download</button>
-							<!-- Visible to Students only -->
+							<!-- Visible to Uploader only -->
 							<button type="button" class="btn btn-danger">Delete</button>
 						</td>
 					</tr>
@@ -132,7 +133,7 @@
 						<td>
 							<!-- <button type="button" class="btn btn-primary">Upload</button> -->
 							<button type="button" class="btn btn-success">Download</button>
-							<!-- Visible to Students only -->
+							<!-- Visible to Uploader only -->
 							<button type="button" class="btn btn-danger">Delete</button>
 						</td>
 					</tr>

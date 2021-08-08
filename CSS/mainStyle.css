@@ -1,0 +1,12 @@
+.btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none;
+   -webkit-box-shadow: none;
+}
+
+.hide{
+   display: none;
+}
+#error-text{
+   color: red;
+}
