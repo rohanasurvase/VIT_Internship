@@ -2,6 +2,9 @@
 <head>
 	<style>
 		.page-footer{
+			/*position: relative;*/
+			/*width: 100%;
+			margin-bottom: 0;*/
 			background: #CDCDCD;
 			margin:0px auto;
 		    padding: 20px 0px 20px 0px;

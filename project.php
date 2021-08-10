@@ -113,11 +113,13 @@
 				<tbody>
 					<tr>
 						<th scope="row">1</th>
-						<td>HTML code</td>
+						<td>Project Report</td>
+						<!-- Initially dash -->
 						<td>12 June 2021</td>
 						<td>Shardul Birje</td>
 						<td>12.5 kb</td>
 						<td>
+							<!-- Display to Uploader-->
 							<!-- <button type="button" class="btn btn-primary">Upload</button> -->
 							<button type="button" class="btn btn-success">Download</button>
 							<!-- Visible to Uploader only -->
