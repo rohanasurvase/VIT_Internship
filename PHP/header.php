@@ -26,12 +26,12 @@
                 <a class="nav-link" href="#">About</a>
               </li>
             </ul>
-            <div class="search-box-container d-flex justify-content-center">
+            <div class=" d-flex justify-content-center">
                 <!-- <span class="fa fa-search"></span> -->
-                    <input type="search" class="form-control rounded " id="search-input" placeholder="Search" />
+                    <input type="search" class="form-control rounded " placeholder="Search" />
                     <div class="input-group-append bg-white">
                         <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search By</button>
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search By</button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="#">Project</a>
                                 <a class="dropdown-item" href="#">Student</a>

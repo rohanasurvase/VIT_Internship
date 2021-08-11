@@ -1,3 +1,14 @@
+<html>
+<head>
+	<style>
+		.page-footer{
+			background: #CDCDCD;
+			margin:0px auto;
+		    padding: 20px 0px 20px 0px;
+		}
+	</style>
+</head>	
+
 <?php
 	echo'
 	<footer class="page-footer">
@@ -40,3 +51,4 @@
 	</footer>
 	';
 ?>
+</html>
