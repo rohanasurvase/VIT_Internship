@@ -67,7 +67,7 @@
 <?php
 
   // include("functions.php");
-include('Connect.php');
+include('./PHP/connect.php');
 
   if(isset($_POST['signup-submit']))
   {
@@ -77,36 +77,25 @@ include('Connect.php');
     $type =  $_POST['type'];
     $password = $_POST['password'];
 
-    $sql = "INSERT INTO user_info (email,password,type,username,user_id) VALUES('". $email ."','". $password ."','". $type ."','". $user_name ."','b123')";
+    $sql = "INSERT INTO user_info (email,password,type,username,user_id) VALUES('". $email ."','". $password ."','". $type ."','". $user_name ."','b423')";
     if (mysqli_query($connection, $sql)) {
-      echo "New record created successfully";
+      // if($type=="Student"){
+      //   $id="S".$id;
+      // }
+      // $newuserid=$type[0]+$id;
+      //folder banana hai inside Uploads
+      //folder  name=userid
+      // take them to other page
+      //display green Modal
+      header('Location:LoginPage.php?account=success');
+      echo "New record created successfully"; 
     } else {
       echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }
-  // $stmtinsert = $db->prepare($sql);
-  // $result = $stmtinsert->execute(['$Email', '$Password', '$Type', '$Username', '']);
-  //   if($result){
-  //     echo 'Successfully saved.';
-  //   }else{
-  //     echo 'There were erros while saving the data.';
-  //   }
+  
   }
   else{
     echo 'No data';
   }
-
-
-
-      //save to database
-    // $result = mysqli_query($mysqli,"insert into user_info ('$email','$password','$type','$username',''");
-    //     if($result)
-    //     {
-    //       echo "DONE";
-    //     }
-    //     else{
-    //       echo "SOJA ";
-    //     }
-    // }  
-
 
 ?>

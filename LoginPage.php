@@ -18,8 +18,12 @@ session_start();
 </head>
  <body>
           <?php
+if(isset($_GET['account'])){
+  echo "Success";
+}else{
 
-  include("Connect.php");
+}
+  include("./PHP/connect.php");
   //include("functions.php");
 if(isset($_POST['login-submit']))
   {
@@ -31,7 +35,7 @@ if(isset($_POST['login-submit']))
     {
       //read from database
       $query = "select * from user_info where email = '$email' limit 1";
-      $result = mysqli_query($conn, $query);
+      $result = mysqli_query($connection, $query);
 
       // if($result)
       // {
@@ -39,16 +43,16 @@ if(isset($_POST['login-submit']))
         {
 
           echo"working";
-          // $user_data = mysqli_fetch_assoc($result);
+         $user_data = mysqli_fetch_assoc($result);
           
-          // if($user_data['password'] === $password)
-          // {
+          if($user_data['password'] === $password)
+          {
 
-          //   $_SESSION['user_id'] = $user_data['user_id'];
-          //   header("Location: index.php");
+            $_SESSION['user_id'] = $user_data['user_id'];
+            header("Location: index.php");
           //   die;
           }
-        // }
+        }
       // }
       
       // echo "wrong username or password!";
@@ -64,7 +68,7 @@ if(isset($_POST['login-submit']))
 
 <section class="container-fluid border border-success">
   <div class="Login">
-    <form class="form-container d-flex justify-content-center align-items-center">
+    <form class="form-container d-flex justify-content-center align-items-center" method="POST">
       
       <div class="form-group">
         <h1 style="padding-bottom: 1em">LogIn</h1>
