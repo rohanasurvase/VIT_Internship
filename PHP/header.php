@@ -1,6 +1,6 @@
 <?php	
     echo '<div class="navbar navbar-expand-lg navbar-light bg-default border-bottom border-default">
-		<a class="navbar-brand" href="./index.html">V-Projects</a>
+		<a class="navbar-brand" href="./index.php">V-Projects</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,9 +22,9 @@
                   <a class="dropdown-item" href="./all_users.php?type=project co-ordinator">Project Co-ordinators</a>
                 </div>
               </li>
-              <li class="nav-item about-option">
+              <!--<li class="nav-item about-option">
                 <a class="nav-link" href="#">About</a>
-              </li>
+              </li>-->
             </ul>
             <div class=" d-flex justify-content-center">
                 <!-- <span class="fa fa-search"></span> -->
@@ -45,10 +45,8 @@
               <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
             </form> -->
+            '.((isset($_SESSION["user_id"]))?'<a href="account.php?userid='.$_SESSION["user_id"].'" class="btn btn-outline-primary mx-4">My Account</a>':'<a href="LoginPage.php" class="btn btn-outline-success mx-4">Sign In</a>').'
             
-            <a href="LoginPage.html" class="btn btn-outline-success mx-4">
-                Sign In
-            </a>
 
         </div>
 	</div>

@@ -4,10 +4,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<?php
+        $userID='';
         session_start();
         require('./PHP/common_files.php');
-        if(isset($_GET['id'])){
-            $userID=$_GET['id'];
+        require('./PHP/connect.php');
+        if(isset($_GET['userid'])){
+            $userID=$_GET['userid'];
         }
     ?>
 	<title>Account</title>
@@ -120,7 +122,7 @@
         
     ?>
 	<div class="container-fluid account-section mt-3">
-        <div class="row">
+        <div class="row my-4">
 	        <div class="col-lg-4 border-md-right border-default">
                 <div class="container ">
                     <img src="https://chandanimourya.netlify.app/Images/chandani.jpg" alt="Profile" class="img-fluid rounded d-block mx-auto" style="height: 30vh; position:relative;">
@@ -136,10 +138,11 @@
                             </div>
                             <?php
                                 //check session variable
-                                //if($_SESSION["user_id"]===userID)
+                                if($_SESSION["user_id"]===$userID){
                                 // Display Pencil for Editing
-                                echo'<button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>';
-                                ?>
+                                    echo'<button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>';
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>     
@@ -151,11 +154,24 @@
                    <div class="projects">
                         <div class="d-flex justify-content-between align-items-center py-3">
                             <h2>Project Details</h2>
-                            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#addProjectModal">
-                                <!-- Only 1 for project -->
-                                <i class="fas fa-plus"></i>
-                                Add Project
-                            </button>
+                            <?php
+                                $selectID="SELECT `project_id` FROM `group_details`";
+                                if($result = mysqli_query($connection, $selectID)){
+                                    $details = mysqli_fetch_assoc($result);
+                                }
+                                else{
+                                    echo "Error";
+                                }
+                                // Type=student
+                                if($_SESSION["user_id"]===$userID && !is_null($details['project_id'])){
+                                    echo 
+                                    '<button class="btn btn-outline-secondary" data-toggle="modal" data-target="#addProjectModal">
+                                        
+                                        <i class="fas fa-plus"></i>
+                                        Add Project
+                                    </button>';
+                                }
+                            ?>
                         </div>
                         <div class="container">
                            <div class="card mb-4">
@@ -196,8 +212,12 @@
                            </div>
                         </div>         
                    </div>
+                   <form method="POST" class="container d-flex justify-content-end">
+                       <button class="btn btn-outline-secondary" name="logout" type="submit">Log Out</button> 
+                   </form>
                 </div>
-           </div> 
+           </div>
+            
         </div>
     </div>
 	<!--<div class="col col-lg-9 border border-danger">
@@ -207,7 +227,8 @@
 	<!-- </div> -->
     <?php
         require('./PHP/footer.php')
-    ?>		
+    ?>
+
     <script>
         let count=document.getElementById('member-count');
         count.addEventListener('input', ()=>{
@@ -238,5 +259,16 @@
             }
         });
     </script>
+    <?php
+    if(isset($_POST['logout'])){
+        unset($_SESSION['user_id']);
+        // $_SESSION['loggedin']=false;
+        session_destroy();
+        echo '<script> location.href="./index.php";</script>';
+        // header('Location:./index.php'); 
+        exit;
+    }
+    ?>
 </body>
 </html>
+  

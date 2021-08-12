@@ -2,11 +2,12 @@
 <head>
 	<style>
 		.page-footer{
-			/*position: relative;*/
-			/*width: 100%;
-			margin-bottom: 0;*/
+			position: static;
+			bottom: 0;
+			left: 0;
+			width: 100%;
 			background: #CDCDCD;
-			margin:0px auto;
+			/*margin:0px auto;*/
 		    padding: 20px 0px 20px 0px;
 		}
 	</style>
