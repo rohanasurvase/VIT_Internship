@@ -67,7 +67,7 @@
 <?php
 
   // include("functions.php");
-include('./PHP/connect.php');
+  include('./PHP/connect.php');
 
   if(isset($_POST['signup-submit']))
   {
@@ -77,25 +77,42 @@ include('./PHP/connect.php');
     $type =  $_POST['type'];
     $password = $_POST['password'];
 
-    $sql = "INSERT INTO user_info (email,password,type,username,user_id) VALUES('". $email ."','". $password ."','". $type ."','". $user_name ."','b423')";
-    if (mysqli_query($connection, $sql)) {
-      // if($type=="Student"){
-      //   $id="S".$id;
-      // }
-      // $newuserid=$type[0]+$id;
+
+    $sql = "INSERT INTO user_info (email,password,type,username) VALUES('". $email ."','". $password ."','". $type ."','". $user_name ."')";
+
+
+    if ((mysqli_query($connection, $sql))){
+
+
+
+      $id=mysqli_insert_id($connection);
+
+       if(!empty($type))
+       {
+        $newuserid = $type[0].strval($id);
+       }
+
+        $query="update user_info set user_id='$newuserid' where id='$id';";
+        $run_query=mysqli_query($connection,$query);
+        if (!$run_query) 
+        {
+             echo mysqli_error();
+          }
+              else
+               {
+   echo "'your user name is and user id is '.$newuserid.'" ;
+    }
+  
       //folder banana hai inside Uploads
       //folder  name=userid
       // take them to other page
-      //display green Modal
-      header('Location:LoginPage.php?account=success');
-      echo "New record created successfully"; 
-    } else {
-      echo "Error: " . $sql . "<br>" . mysqli_error($connection);
-    }
-  
-  }
-  else{
-    echo 'No data';
-  }
 
-?>
+      //display green Modal
+
+      header('Location:LoginPage.php?account=success');
+
+      echo "New record created successfully";
+}
+}
+
+
