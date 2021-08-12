@@ -4,9 +4,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<?php
+        session_start();
         require('./PHP/common_files.php');
+        if(isset($_GET['id'])){
+            $userID=$_GET['id'];
+        }
     ?>
-	<title>Document</title>
+	<title>Account</title>
 </head>
 <body>
     <!-- Check if account id==loggedin user id => if true display pencils else no -->
@@ -112,6 +116,9 @@
         </div>
       </div>
     </div>
+    <?php
+        
+    ?>
 	<div class="container-fluid account-section mt-3">
         <div class="row">
 	        <div class="col-lg-4 border-md-right border-default">
@@ -127,8 +134,12 @@
                                 <span class="d-block">Information Technology</span>
                                 <p>Batch of 2022</p>
                             </div>
-                            <!-- Display Pencil for Editing -->
-                            <button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>
+                            <?php
+                                //check session variable
+                                //if($_SESSION["user_id"]===userID)
+                                // Display Pencil for Editing
+                                echo'<button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>';
+                                ?>
                         </div>
                     </div>
                 </div>     
