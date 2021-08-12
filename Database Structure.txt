@@ -3,26 +3,32 @@ Proposed Database Structure
 User-
 id-text //key
 type-text
+email-text
+password-text
+department-text
 
-Project-
+Project-(Created)
 id-number //key
 name-text
 description-text
 blackbook-text(link)
-code-text(link)
+//code-text(link)
 research_paper-text(link)
 guideid-number
 //userid-number
 other_details-text
 group_id-text
+project_link-text
 
-Guide-
+Guide-(Created)
+image-text(link)
 guide_id-text //key
 guide_name- text
 project_count-number
-group_ids-text
+project_ids-text
 
-Student-
+
+Student-(Created)
 image-text(link)
 student_id-text //key
 student_name-text
@@ -30,15 +36,17 @@ group_id-number
 guide_id-number
 batch-number(year)
 
-Admin-
+
+Admin-(Created)
+image-text(link)
 admin_id-text //key
 admin_name-text
 
-Group-
+
+Group-(Created)
 group_id-text //key
 group_member_count-number
 group_member_ids-text
 group_member_names-text
 guide_id-text
 project_id-number
-

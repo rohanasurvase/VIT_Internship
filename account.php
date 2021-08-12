@@ -3,10 +3,16 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="./CSS/mainStyle.css">
-	<title>Document</title>
+	<?php
+        $userID='';
+        session_start();
+        require('./PHP/common_files.php');
+        require('./PHP/connect.php');
+        if(isset($_GET['userid'])){
+            $userID=$_GET['userid'];
+        }
+    ?>
+	<title>Account</title>
 </head>
 <body>
     <!-- Check if account id==loggedin user id => if true display pencils else no -->
@@ -112,8 +118,11 @@
         </div>
       </div>
     </div>
+    <?php
+        
+    ?>
 	<div class="container-fluid account-section mt-3">
-        <div class="row">
+        <div class="row my-4">
 	        <div class="col-lg-4 border-md-right border-default">
                 <div class="container ">
                     <img src="https://chandanimourya.netlify.app/Images/chandani.jpg" alt="Profile" class="img-fluid rounded d-block mx-auto" style="height: 30vh; position:relative;">
@@ -127,8 +136,13 @@
                                 <span class="d-block">Information Technology</span>
                                 <p>Batch of 2022</p>
                             </div>
-                            <!-- Display Pencil for Editing -->
-                            <button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>
+                            <?php
+                                //check session variable
+                                if($_SESSION["user_id"]===$userID){
+                                // Display Pencil for Editing
+                                    echo'<button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>';
+                                }
+                            ?>
                         </div>
                     </div>
                 </div>     
@@ -140,11 +154,24 @@
                    <div class="projects">
                         <div class="d-flex justify-content-between align-items-center py-3">
                             <h2>Project Details</h2>
-                            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#addProjectModal">
-                                <!-- Only 1 for project -->
-                                <i class="fas fa-plus"></i>
-                                Add Project
-                            </button>
+                            <?php
+                                $selectID="SELECT `project_id` FROM `group_details`";
+                                if($result = mysqli_query($connection, $selectID)){
+                                    $details = mysqli_fetch_assoc($result);
+                                }
+                                else{
+                                    echo "Error";
+                                }
+                                // Type=student
+                                if($_SESSION["user_id"]===$userID && !is_null($details['project_id'])){
+                                    echo 
+                                    '<button class="btn btn-outline-secondary" data-toggle="modal" data-target="#addProjectModal">
+                                        
+                                        <i class="fas fa-plus"></i>
+                                        Add Project
+                                    </button>';
+                                }
+                            ?>
                         </div>
                         <div class="container">
                            <div class="card mb-4">
@@ -185,8 +212,12 @@
                            </div>
                         </div>         
                    </div>
+                   <form method="POST" class="container d-flex justify-content-end">
+                       <button class="btn btn-outline-secondary" name="logout" type="submit">Log Out</button> 
+                   </form>
                 </div>
-           </div> 
+           </div>
+            
         </div>
     </div>
 	<!--<div class="col col-lg-9 border border-danger">
@@ -197,9 +228,7 @@
     <?php
         require('./PHP/footer.php')
     ?>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>		
+
     <script>
         let count=document.getElementById('member-count');
         count.addEventListener('input', ()=>{
@@ -230,5 +259,16 @@
             }
         });
     </script>
+    <?php
+    if(isset($_POST['logout'])){
+        unset($_SESSION['user_id']);
+        // $_SESSION['loggedin']=false;
+        session_destroy();
+        echo '<script> location.href="./index.php";</script>';
+        // header('Location:./index.php'); 
+        exit;
+    }
+    ?>
 </body>
 </html>
+  
