@@ -11,7 +11,7 @@
         if(isset($_GET['userid'])){
             $userID=$_GET['userid'];
         }
-    ?>
+    ?> 
 	<title>Account</title>
 </head>
 <body>
@@ -119,31 +119,40 @@
       </div>
     </div>
     <?php
-        
+        $selectDetails="SELECT * FROM `user_info` WHERE `user_id`='". $userID ."'";
+        $queryResult = mysqli_query($connection, $selectDetails);
+        $userDetails = mysqli_fetch_assoc($queryResult);
+        // echo($userDetails);
     ?>
 	<div class="container-fluid account-section mt-3">
         <div class="row my-4">
-	        <div class="col-lg-4 border-md-right border-default">
-                <div class="container ">
-                    <img src="https://chandanimourya.netlify.app/Images/chandani.jpg" alt="Profile" class="img-fluid rounded d-block mx-auto" style="height: 30vh; position:relative;">
+	        <div class="col-lg-4 border-right border-default">
+                <div class="container">
+                    <img src="<?php
+                       echo $userDetails['image'];
+                    ?>" alt="Profile" class="img-fluid rounded d-block mx-auto" style="height: 30vh; position:relative;">
                     <!-- Tablet Updates needed -->
-                    <div class="profile-details my-2 container " style="padding-bottom: 5em;">
-                        <div class="d-flex justify-content-end">
+                    <div class="profile-details my-2 container mx-auto" style="padding-bottom: 5em;">
+                        <div class="d-flex justify-content-center">
                             
                             <div class="text-center pr-lg-3 pl-lg-0 pl-5">
-                                <h5>Chandani Mourya: 19101A2001</h5>
+                                <h5><?php
+                                    echo $userDetails['username']; //19101A2001
+                                ?></h5>
                                 <span><span class="fa fa-map-marker-alt"></span> Mumbai</span>
-                                <span class="d-block">Information Technology</span>
-                                <p>Batch of 2022</p>
+                                <span class="d-block">Department</span>
+                                <p>Batch of <?php ?></p>
+                                <?php
+                                        //check session variable
+                                        if($_SESSION["user_id"]===$userID){
+                                        // Display Pencil for Editing
+                                            echo'<button class="btn btn-outline-secondary align-self-start my-2" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-plus"></i> Edit Details</i></button>';
+                                        }
+                                    ?>
                             </div>
-                            <?php
-                                //check session variable
-                                if($_SESSION["user_id"]===$userID){
-                                // Display Pencil for Editing
-                                    echo'<button class="btn bg-transparent align-self-start" data-toggle="modal" data-target="#editProfileModal"><i class="fas fa-pencil-alt"></i></button>';
-                                }
-                            ?>
+                            
                         </div>
+                        
                     </div>
                 </div>     
            </div>
@@ -154,26 +163,31 @@
                    <div class="projects">
                         <div class="d-flex justify-content-between align-items-center py-3">
                             <h2>Project Details</h2>
+                            
+                        </div>
+                        <div class="container">
                             <?php
-                                $selectID="SELECT `project_id` FROM `group_details`";
-                                if($result = mysqli_query($connection, $selectID)){
+                                $check="";                            
+                                $selectID="SELECT `group_id` FROM `student` WHERE `student_id`='" .$userID. "'";
+                                $selectResult = mysqli_query($connection, $selectID);
+                                if(mysqli_num_rows($selectResult) > 0){
                                     $details = mysqli_fetch_assoc($result);
+                                    $check=is_null($details['group_id']);
                                 }
                                 else{
-                                    echo "Error";
+                                    //Do not Display any projects
+                                    // echo "No Rows Found";
                                 }
                                 // Type=student
-                                if($_SESSION["user_id"]===$userID && !is_null($details['project_id'])){
+                                if($_SESSION["user_id"]===$userID){
                                     echo 
-                                    '<button class="btn btn-outline-secondary" data-toggle="modal" data-target="#addProjectModal">
+                                    '<button class="btn btn-outline-secondary my-2" data-toggle="modal" data-target="#addProjectModal">
                                         
                                         <i class="fas fa-plus"></i>
                                         Add Project
                                     </button>';
                                 }
                             ?>
-                        </div>
-                        <div class="container">
                            <div class="card mb-4">
                                 <div class="card-header">
                                    BookBarn: Web Based Book Recommendation and E-commerce System

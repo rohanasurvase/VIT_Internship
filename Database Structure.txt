@@ -1,11 +1,13 @@
 Proposed Database Structure
 
 User-
-id-text //key
+id-int
+user_id-text //key
 type-text
 email-text
 password-text
 department-text
+username-text
 
 Project-(Created)
 id-number //key

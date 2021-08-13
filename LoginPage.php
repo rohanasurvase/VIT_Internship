@@ -39,7 +39,7 @@ if(isset($_POST['login-submit']))
           if($user_data['password'] === $password)
           {
 
-            $_SESSION['user_id'] = $user_data['user_id'];
+            $_SESSION['user_id'] = $user_data['userid'];
             header("Location: index.php");
           //   die;
           }
@@ -78,7 +78,7 @@ if(isset($_POST['login-submit']))
     <!-- Remind Passowrd -->
     <div id="formFooter">
       <a class="underlineHover" href="#">Forgot Password?</a>
-         <p> Don't have an account? <a href="C:\Internship\SignUp.html" target="_blank" >Sign Up</a></p>
+         <p><a href="./SignUp.php">Don't have an account?</a></p>
     </div>
     
   </div>
