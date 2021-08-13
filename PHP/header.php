@@ -1,5 +1,6 @@
 <?php	
-    echo '<div class="navbar navbar-expand-lg navbar-light bg-default border-bottom border-default">
+    echo '
+    <div class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark border-bottom border-default">
 		<a class="navbar-brand" href="./index.php">V-Projects</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -10,7 +11,7 @@
                 <a class="nav-link" href="./index.php">Home</a>
               </li>
               <li class="nav-item projects-option">
-                <a class="nav-link" href="#">Projects</a>
+                <a class="nav-link" href="./all_projects.php">Projects</a>
               </li>
               <li class="nav-item dropdown users-option">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

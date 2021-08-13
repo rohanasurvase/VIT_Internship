@@ -17,6 +17,9 @@
 <body>
     <!-- Check if account id==loggedin user id => if true display pencils else no -->
     <?php
+        if(!isset($_SESSION['user_id'])){
+            echo "<script> location.href='./LoginPage.php'; </script>";
+        }
         require('./PHP/header.php')
     ?>
     <!-- Profile details update -->

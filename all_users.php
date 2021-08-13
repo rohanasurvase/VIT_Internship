@@ -17,7 +17,7 @@
     ?>
     <div class="container mx-auto">
         <?php
-            $selectUser="SELECT image,username,type FROM `user_info` where `type`='". $_GET['type'] ."'";
+            $selectUser="SELECT user_id,image,username,type FROM `user_info` where `type`='". $_GET['type'] ."'";
             $result = mysqli_query($connection, $selectUser);
 
             if (mysqli_num_rows($result) > 0) {
@@ -32,7 +32,7 @@
                             <div class="card border-0">
                               <!-- <h5 class="card-header">User Name</h5> <--></-->
                               <div class="card-body">
-                                <h5 class="card-title">'.$row["username"].'</h5>
+                                <a href="./account.php?userid='.$row["user_id"].'"<h5 class="card-title">'.$row["username"].'</h5></a>
                                 <p class="card-text">'.ucfirst($row["type"]).'</p>
                               </div>
                             </div>
