@@ -22,49 +22,101 @@
         }
         require('./PHP/header.php')
     ?>
+    <?php
+        $selectDetails="SELECT * FROM `user_info` WHERE `user_id`='". $userID ."'";
+        $queryResult = mysqli_query($connection, $selectDetails);
+        $userDetails = mysqli_fetch_assoc($queryResult);
+        $selectStudentDetails="SELECT `batch` FROM `student` WHERE `student_id`='". $userID ."'";
+        $studentQueryResult = mysqli_query($connection, $selectStudentDetails);
+        $studentDetails = mysqli_fetch_assoc($studentQueryResult);
+        // echo($userDetails);
+    ?>
     <!-- Profile details update -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editProfileModalLabel">Edit Profile Details</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <label for="profile-name" class="col-form-label">Name:</label>
-                    <input type="text" class="form-control" id="profile-name">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="profile-roll" class="col-form-label">Roll Number:</label>
-                    <input type="text" class="form-control" id="profile-roll">
-                </div>
-                <div class="form-group">
-                    <label for="profile-location" class="col-form-label">Location:</label>
-                    <input type="text" class="form-control" id="profile-location">
+                <div class="modal-body">
+                    <form method="POST" action="">
+                        <div class="row">
+                            <div class="col">
+                                <label for="first-name">First Name</label>
+                                <input type="text" class=" form-control" placeholder="First Name" id="first-name" name="first-name" value="<?php 
+                                if(isset($userDetails["username"])){
+                                    $text=explode(" ",$userDetails["username"]);
+                                    echo $text[0];
+                                }else{
+                                    echo "";
+                                }
+                            ?>">
+                            </div>
+                            <div class="col">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Last Name" id='last-name' name="last-name" value="<?php 
+                                if(isset($userDetails["username"])){
+                                    $text=explode(" ",$userDetails["username"]);
+                                    echo $text[1];
+                                }else{
+                                    echo "";
+                                }
+                            ?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-branch" class="col-form-label">Department</label>
+                            <input type="text" class="form-control" id="profile-branch" placeholder="Branch" name="branch" value="<?php 
+                                if(isset($userDetails["department"])){
+                                    echo $userDetails["department"];
+                                }else{
+                                    echo "";
+                                }
+                            ?>">
+                        </div>
+                        <?php
+                            $batchVal='';
+                            if(isset($studentDetails["batch"])){
+                                $bacthVal=$studentDetails["batch"];
+                            }else{
+                                $bacthVal="";
+                            }
+                            if($userDetails["type"]==="student"){
+                                echo'<div class="form-group">
+                                    <label for="pass-year" class="col-form-label">Passing Year:</label>
+                                    <input type="text" class="form-control" id="pass-year" name="pass-year" placeholder="eg: 2022"
+                                    value="'.$batchVal.'">
+                                    </div>';
+                            }
+                        ?>
+                        <!-- <div class="form-group">
+                            <label for="profile-location" class="col-form-label">Location:</label>
+                            <input type="text" class="form-control" id="profile-location">
 
+                        </div> -->
+                        <!-- <div class="row">
+                            <div class="col">
+                                <label for="branch">Branch</label>
+                                <input type="text" class="form-control" placeholder="Branch" id="branch">
+                            </div>
+                            <div class="col">
+                                <label for="pass-year">Passing Year</label>
+                                <input type="number" class="form-control" placeholder="Passing Year" id='pass-year'>
+                            </div>
+                        </div> -->
+                        <button type="button" type="submit" class="btn btn-primary" name="details-submit">Update Details</button>
+                    </form>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="branch">Branch</label>
-                        <input type="text" class="form-control" placeholder="Branch" id="branch">
-                    </div>
-                    <div class="col">
-                        <label for="pass-year">Passing Year</label>
-                        <input type="number" class="form-control" placeholder="Passing Year" id='pass-year'>
-                    </div>
-                </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Update Details</button>
-          </div>
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                
+              </div>
+          <!-- </form> -->
+            </div>
         </div>
-      </div>
     </div>
     <!-- Only 1 project for student -->
     <!-- Add to guide's account -->
@@ -121,12 +173,7 @@
         </div>
       </div>
     </div>
-    <?php
-        $selectDetails="SELECT * FROM `user_info` WHERE `user_id`='". $userID ."'";
-        $queryResult = mysqli_query($connection, $selectDetails);
-        $userDetails = mysqli_fetch_assoc($queryResult);
-        // echo($userDetails);
-    ?>
+    
 	<div class="container-fluid account-section mt-3">
         <div class="row my-4">
 	        <div class="col-lg-4 border-right border-default">
@@ -142,9 +189,21 @@
                                 <h5><?php
                                     echo $userDetails['username']; //19101A2001
                                 ?></h5>
-                                <span><span class="fa fa-map-marker-alt"></span> Mumbai</span>
-                                <span class="d-block">Department</span>
-                                <p>Batch of <?php ?></p>
+                                <!-- <span><span class="fa fa-map-marker-alt"></span> Mumbai</span> -->
+                                <span class="d-block">
+                                    <?php
+                                        echo $userDetails['department'];
+                                    ?>
+                                </span>
+                                <?php
+                                    if($userDetails["type"]==="student"){
+                                        if($studentDetails["batch"]==0){
+                                            echo "<p>Enter Batch</p>";
+                                        }else{
+                                            echo "<p>Batch of </p>".$studentDetails['batch'];
+                                        }
+                                    }
+                                 ?>
                                 <?php
                                         //check session variable
                                         if($_SESSION["user_id"]===$userID){
@@ -191,7 +250,7 @@
                                     </button>';
                                 }
                             ?>
-                           <div class="card mb-4">
+                           <!-- <div class="card mb-4">
                                 <div class="card-header">
                                    BookBarn: Web Based Book Recommendation and E-commerce System
                                 </div>
@@ -204,7 +263,7 @@
                                 </div>
                                 <div class="card-body">
                                     <p>Group Members: Rohana Survase, Sayali Khamgaonkar</p>
-                                    <!-- <p>Technology used: HTML, CSS, Javascript, SQL, PHP, Python. -->
+                                    <--<p>Technology used: HTML, CSS, Javascript, SQL, PHP, Python. --
                                     </p>
                                     <a href="#" class="btn btn-primary">View Project</a>
                                 </div>
@@ -222,16 +281,20 @@
                                 </div>
                                 <div class="card-body">
                                     <p>Group Members: Rohana Survase, Sayali Khamgaonkar</p>
-                                    <!-- <p>Technology used: HTML, CSS, Javascript, SQL, PHP, Python. -->
+                                    <-- <p>Technology used: HTML, CSS, Javascript, SQL, PHP, Python. ->
                                     </p>
                                     <a href="#" class="btn btn-primary">View Project</a>
                                 </div>
-                           </div>
+                           </div> -->
                         </div>         
                    </div>
-                   <form method="POST" class="container d-flex justify-content-end">
-                       <button class="btn btn-outline-secondary" name="logout" type="submit">Log Out</button> 
-                   </form>
+                   <?php
+                       if($_SESSION["user_id"]===$userID){
+                           echo'<form method="POST" class="container d-flex justify-content-end">
+                               <button class="btn btn-outline-secondary" name="logout" type="submit">Log Out</button> 
+                           </form>';
+                        }
+                    ?>
                 </div>
            </div>
             
@@ -288,4 +351,35 @@
     ?>
 </body>
 </html>
+
+<!-- For Profile Details -->
+<?php 
+    if (isset($_POST['details-submit'])) {
+        $firstName = $_POST['first-name'];
+        $lastName=$_POST['last-name'];
+        $name=$firstName.' '.$lastName;     
+        $dept=$_POST['department'];
+        $year='';
+        $query="UPDATE `user_info` SET `username`='". $name ."', `department`='". $dept ."', WHERE `user_id`='". $userID ."'";
+        if (mysqli_query($connection, $query)) {
+          echo "Record updated successfully";
+        } else {
+          echo "Error updating record: " . mysqli_error($connection);
+        }
+        if($userDetails["type"]==="student"){
+            $year=$_POST['pass-year'];
+            $studentQuery="UPDATE `student` SET `batch`='". $year ."' WHERE `student_id`='". $userID ."'";
+            if (mysqli_query($connection, $studentQuery)) {
+              echo "<script>
+                $('#editProfileModal').modal('hide');
+              </script>";
+            } else {
+              echo "Error updating record: " . mysqli_error($connection);
+            }
+        }
+        // $studentQuery="UPDATE `student` SET ``"
+    }else{
+        echo "Button Error";
+    }
+?>
   
