@@ -23,6 +23,7 @@
         require('./PHP/header.php')
     ?>
     <?php
+    //SELECT PROJECT
         $selectDetails="SELECT * FROM `user_info` WHERE `user_id`='". $userID ."'";
         $queryResult = mysqli_query($connection, $selectDetails);
         $userDetails = mysqli_fetch_assoc($queryResult);
@@ -83,7 +84,7 @@
                         </div>
                         <div class="form-group">
                             <label for="profile-branch" class="col-form-label">Department</label>
-                            <input type="text" class="form-control" id="profile-branch" placeholder="Branch" name="branch" value="<?php 
+                            <input type="text" class="form-control" id="profile-branch" placeholder="Enter Department code" name="branch" data-toggle="tooltip" data-placement="right" title="eg-INFT/CMPN" value="<?php 
                                 if(isset($userDetails["department"])){
                                     echo $userDetails["department"];
                                 }else{
@@ -91,6 +92,22 @@
                                 }
                             ?>">
                         </div>
+                        
+                        <?php
+                            $division='';
+                            if(isset($studentDetails["division"])){
+                                $division=$studentDetails["division"];
+                            }else{
+                                $division="";
+                            }
+                            if($userDetails["type"]==="student"){
+                                echo'<div class="form-group">
+                                <label for="profile-division" class="col-form-label">Division</label>
+                                <input type="text" class="form-control" id="profile-division" placeholder="Enter Division" name="division" data-toggle="tooltip" data-placement="right" title="eg-1/2" value="'.$division.'">
+                                </div>
+                                ';
+                            }
+                        ?>
                         <?php
                             $batchVal='';
                             if(isset($studentDetails["batch"])){
@@ -125,16 +142,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addProjectModalLabel">Add/Edit Project Details</h5>
+            
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <form method="POST" action="">
           <div class="modal-body">
-            
+                <p style="color:red">Items marked <b>*</b> cannot be updated once inserted</p>
                 <div class="form-group">
                     <label for="project-name" class="col-form-label">Project Name</label>
-                    <input type="text" class="form-control" id="project-name" name="project-name">
+                    <input type="text" class="form-control" id="project-name" name="project-name" required>
                 </div>
                 <div class="form-group">
                     <label for="project-link" class="col-form-label">Project link</label>
@@ -142,14 +160,14 @@
                 </div>
                 <div class="form-group">
                     <label for="project-technologies" class="col-form-label">Techonologies used</label>
-                    <input type="text" class="form-control" id="project-technologies" placeholder="eg: HTML, CSS" data-toggle="tooltip" data-placement="right" title="Use commas for entering multiple Techonologies/languages" name='skills'>
+                    <input type="text" class="form-control" id="project-technologies" placeholder="eg: HTML, CSS" data-toggle="tooltip" data-placement="right" title="Use commas for entering multiple Techonologies/languages" name='skills' required>
                     <!-- <button class="btn btn-secondary" id='skills-submit'>Add</button> -->
                     <!-- <p class="skills" id='skills-box'> -->
                         
                     </p>
                 </div>
                 <div class="form-group">
-                    <label for="project-guide" class="col-form-label">Guide Name</label>
+                    <label for="project-guide" class="col-form-label">Guide Name <span style="color:red">*</span></label>
                     <input type="text" class="form-control" id="project-guide" name="project-guide" placeholder='Enter guide code' data-toggle="tooltip" data-placement="right" title="For eg:Enter RS for Rohana Survase" value="<?php  
                         if(isset($studentDetails['guide_id'])){
                             $GuideName="SELECT `guide_code` FROM `guide` where `guide_id`='". $studentDetails['guide_id'] ."'";
@@ -159,20 +177,20 @@
                                 echo $row['guide_code'];
                             }
                         }
-                    ?>">
+                    ?>" required>
                 </div>
                 <div class="form-group">
-                    <label for="member-count" class="col-form-label">Group Member count</label>
-                    <input type="number" class="form-control" id="member-count" name="member-count" placeholder="Member count (excluding you)">
+                    <label for="member-count" class="col-form-label">Group Member count <span style="color:red">*</span></label>
+                    <input type="number" class="form-control" id="member-count" name="member-count" placeholder="Member count (excluding you)" required>
                     <p id="error-text"></p>
                 </div>
                 <div class="row">
-                    <div class="col member-input-container hide">
-                        <label for="member-1">Member Email</label>
+                    <div class="col member-input-container hide" >
+                        <label for="member-1">Member Email <span style="color:red">*</span></label>
                         <input type="email" class=" form-control" placeholder="Member 1 Email" id="member-1" name="member-1">
                     </div>
                     <div class="col member-input-container hide">
-                        <label for="member-2">Member Email</label>
+                        <label for="member-2">Member Email <span style="color:red">*</span></label>
                         <input type="email" class="form-control" placeholder="Member 2 Email" id='member-2' name="member-2">
                     </div>
                 </div>
@@ -182,7 +200,7 @@
                 </div> -->
                 <div class="form-group">
                     <label for="project-desc" class="col-form-label">Project Description</label>
-                    <textarea class="form-control" id="project-desc" name="project-desc"></textarea>
+                    <textarea class="form-control" id="project-desc" name="project-desc" required></textarea>
                 </div>
                 
                 
@@ -354,6 +372,7 @@
 
                 for(let i=1;i<=count_value;i++){
                     container_ref[i-1].classList.remove('hide');
+                    container_ref[i-1].required=true;
                 }
             }
             else{
@@ -361,6 +380,7 @@
                     
                     if(!i.classList.contains('hide')){
                         i.classList.add('hide');
+                        i.required=false;
                     }
                 } 
                 if(count_value>2){
@@ -399,6 +419,7 @@
         $lastName=$_POST['last-name'];
         $name=$firstName.' '.$lastName;     
         $dept=$_POST['department'];
+        $division_info='';
         $year='';
         $query="UPDATE `user_info` SET `username`='". $name ."', `department`='". $dept ."', WHERE `user_id`='". $userID ."'";
         if (mysqli_query($connection, $query)) {
@@ -407,8 +428,9 @@
           echo "Error updating record: " . mysqli_error($connection);
         }
         if($userDetails["type"]==="student"){
+            $division_info=$_POST['division'];
             $year=$_POST['pass-year'];
-            $studentQuery="UPDATE `student` SET `batch`='". $year ."' WHERE `student_id`='". $userID ."'";
+            $studentQuery="UPDATE `student` SET `batch`='". $year ."', `division`='". $division_info ."' WHERE `student_id`='". $userID ."'";
             if (mysqli_query($connection, $studentQuery)) {
               echo "<script>
                 $('#editProfileModal').modal('hide');
@@ -430,8 +452,10 @@
         $projectDesc=$_POST['project-desc'];
         $projectGuide=$_POST['project-guide'];
         $technologies=$_POST['skills'];
-        $technologies=explode($technologies,',');
-        $count=$_POST['member-count'];
+        /*if(isset($technologies)){
+            $technologies=explode($technologies,',');
+        }*/
+        $count=(int)$_POST['member-count'];
         $member2='';
         $memberCheck='';
         $member1=$_POST['member-1'];
@@ -447,12 +471,14 @@
             //print_r($guideRow);
             // Only One Member
             if($count==1){
+                //Selects Email of member
                 $memberCheck="SELECT `user_id` FROM `user_info` WHERE `email`='". $member1 ."'";
                 $memberResult = mysqli_query($connection, $memberCheck);
                 if(mysqli_num_rows($memberResult) > 0){
                      $memberRow = mysqli_fetch_array($memberResult, MYSQLI_NUM);
                     //$memberRow = mysqli_fetch_assoc($memberResult);
                     array_push($value,$memberRow[0]);
+                    // print_r($value);
                     //$value=$memberRow;
                     // $updateStudent="UPDATE TABLE `student` SET `guide_id`=";
                 }else{
@@ -481,7 +507,7 @@
                     for ($i=0; $i<2; $i++) { 
                         array_push($value,$memberRow1[$i]);
                     }
-                    
+                    print_r($value);
                     //$value=;
                 }
                 else{
@@ -495,59 +521,199 @@
             echo"Guide Account Doesn't Exist";  
         }
         array_push($value,$userID);
+        // print_r(count($value));
         // print_r($value);
         //print_r(array_count_values($value));
         // $group_id='';
-        $group_id=$value[0].''.$value[1].''.$guideRow['guide_id'];
+        // $group_id=$value[0].''.$value[1].''.$guideRow['guide_id'];
 
-        $group_id=str_replace('s', '', $group_id);
+        // $group_id=str_replace('s', '', $group_id);
         $updateStudent='';
         $group_member_ids='';
         $select_usernames='';
         $selectRow='';
+        $updateStudent='';
+        $group_member_names='';
         if(count($value)==2){
+            //group member Ids
             $group_member_ids=$value[0].','.$value[1];
+            //Selects Usernames 
             $select_usernames="SELECT `username` from `user_info` WHERE `user_id` IN('". $value[0] ."','". $value[1] ."')";
+            // print_r($select_usernames);
             $selectResult=mysqli_query($connection, $select_usernames);
             if (mysqli_num_rows($selectResult) > 0) {
-                $selectRow = mysqli_fetch_array($selectResult,MYSQLI_NUM);
-            }
-            $group_member_names=$selectRow[0].','.$selectRow[1];
-            $updateStudent="UPDATE `student` SET `group_id`='". $group_id ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN ('". $value[0] ."','". $value[1] ."')";
+                while($selectRow = mysqli_fetch_array($selectResult,MYSQLI_NUM)){
+                    $group_member_names=$group_member_names.$selectRow[0].'  ';    
+                }
+                $group_member_names=trim($group_member_names);
+                $group_member_names=str_replace('  ', ',', $group_member_names);
+                //print_r($group_member_names);
 
+                //$group_member_names.implode(',', ',');
+            }
+            //Check if group already exists
+            $GroupChecker="SELECT  `group_id` FROM `group_details` WHERE `group_member_ids`='". $group_member_ids ."'";
+            $GroupCheckerresult = mysqli_query($connection, $GroupChecker);
+            // Insert or Update Group table
+            if(mysqli_num_rows($GroupCheckerresult)>0){
+                echo("Cannot Update Group Details");
+            }else{
+                $count=$count+1;
+                $insertGroup="INSERT INTO `group_details`(`group_member_count`, `group_member_ids`, `group_member_names`, `guide_id`) VALUES (". $count .",'". $group_member_ids ."','". $group_member_names ."','". $guideRow['guide_id'] ."')";
+
+                if (mysqli_query($connection, $insertGroup)) {
+                    $groupId=mysqli_insert_id($connection);
+                    $newGroupId="Gr".$groupId;
+                    $updateGroup="UPDATE `group_details` SET `group_id`='". $newGroupId ."'";    
+                    if(mysqli_query($connection, $updateGroup)){
+                        $updateStudent="UPDATE `student` SET `group_id`='". $newGroupId ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN ('". $value[0] ."','". $value[1] ."')";
+                    }else{
+                        echo"Error in updating group dets";
+                    }
+                } else {
+                    //print_r($insertGroup);
+                    // Error while inserting data in group table
+                    echo "Error here: " . $insertGroup . "<br>" . mysqli_error($connection);
+                }
+                
+            }
+            
         }else{
             if(isset($value[2])){
                 $group_member_ids=$value[0].','.$value[1].','.$value[2];
                 $select_usernames="SELECT `username` from `user_info` WHERE `user_id` IN('". $value[0] ."','". $value[1] ."','". $value[2] ."')";
                 $selectResult=mysqli_query($connection, $select_usernames);
                 if (mysqli_num_rows($selectResult) > 0) {
-                    $selectRow = mysqli_fetch_array($selectResult,MYSQLI_NUM);
+                    while($selectRow = mysqli_fetch_array($selectResult,MYSQLI_NUM)){
+                        $group_member_names=$group_member_names.$selectRow[0].'  ';
+                    }
+                    $group_member_names=trim($group_member_names);
+                    $group_member_names=str_replace('  ', ',', $group_member_names);
                 }
-                $group_member_names=$selectRow[0].','.$selectRow[1].','.$selectRow[2];
-                $updateStudent="UPDATE `student` SET `group_id`='". $group_id ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN('". $value[0] ."','". $value[1] ."','". $value[2] ."')";
+                $GroupChecker="SELECT  `group_id` FROM `group_details` WHERE `group_member_ids`='". $group_member_ids ."'";
+                $GroupCheckerresult = mysqli_query($connection, $GroupChecker);
+                // Insert or Update Group table
+                if(mysqli_num_rows($GroupCheckerresult)>0){
+                    echo("Cannot Update Group Details");
+                }else{
+                    $count=$count+1;
+                    $insertGroup="INSERT INTO `group_details`(`group_member_count`, `group_member_ids`, `group_member_names`, `guide_id`) VALUES (". $count .",'". $group_member_ids ."','". $group_member_names ."','". $guideRow['guide_id'] ."')";
+                   if (mysqli_query($connection, $insertGroup)) {
+                        $groupId=mysqli_insert_id($connection);
+                        $newGroupId="Gr".$groupId;
+                        $updateGroup="UPDATE `group_details` SET `group_id`='". $newGroupId ."'";
+                        if(mysqli_query($connection, $updateGroup)){
+                            $updateStudent="UPDATE `student` SET `group_id`='". $newGroupId ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN('". $value[0] ."','". $value[1] ."','". $value[2] ."')";
+                        }
+                        else{
+                            echo"Error in updating groups";
+                        }
+                   } else {
+                       // Error while inserting data in group table
+                       echo "Error: " . $insertGroup . "<br>" . mysqli_error($connection);
+                   } 
+                }
+                
             }
         }
-        
-
+        print_r('Query: '.$updateStudent);
         if (mysqli_query($connection, $updateStudent)) {
-            
+            //If student and group table is successfully updated
+            $ProjectChecker="SELECT  `project_id` FROM `project` WHERE `group_id`='". $newGroupId ."'";
+            $ProjectCheckerresult = mysqli_query($connection, $ProjectChecker);        
+            //Update in morning (INSERT and UPDATE to PROJECT)
+            if(mysqli_num_rows($ProjectCheckerresult) > 0){
+                $row = mysqli_fetch_assoc($ProjectCheckerresult);
+                $projectUpdate="UPDATE TABLE `project` SET `project_name`='". $projectName ."', `project_desc`='". $projectDesc ."', `project_link`='". $projectLink ."', `technologies`='". $technologies ."' WHERE project_id='". $row['project_id'] ."'";
+                if (mysqli_query($connection, $projectUpdate)) {
+                  echo "Updated successfully";
+                } else {
+                  echo "Error: " . $projectUpdate . "<br>" . mysqli_error($connection);
+                }
+            }
+            //Insert into project (for new users)
+            else{
+                $projectInsert='';
+                if(isset($project_link)){
+                    $projectInsert="INSERT INTO `project`( `project_name`, `project_desc`, `guideid`, `group_id`, `project_link`, `technologies`) VALUES ('". $projectName ."','". $projectDesc ."','". $guideRow['guide_id'] ."','". $newGroupId ."','". $projectLink ."','". $technologies ."')";
+
+                    if (mysqli_query($connection, $projectInsert)) {
+                        // echo "New record created successfully";
+                        $projectId=mysqli_insert_id($connection);
+                        $deptName=$userDetails["department"];
+                        $divisionChar=$studentDetails["division"];
+                        if($divisionChar==1){
+                            $divisionChar="A";
+                        }else if($divisionChar==2){
+                            $divisionChar="B";
+                        }else{
+                            $divisionChar="C";
+                        }
+                        //ITA1
+                        //CPA1
+                        //ETA1
+                        $newProjectId=$deptName[0].$deptName[2].$divisionChar.$projectId;
+                        //Update Project Id in Project table and group table
+                        $updateProject="UPDATE `project` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
+                        if (mysqli_query($connection, $updateProject)) {
+                            $updateGroup="UPDATE `group_details` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
+                            if(mysqli_query($connection, $updateGroup)){
+                                echo"Success";
+                            }else{
+                                echo"Error in updating group";
+                            }
+                        }else{
+                            echo("Error in updating project");
+                        }
+                        
+                    } else {
+                        // Error in inserting project
+                        echo "Error: " . $projectInsert . "<br>" . mysqli_error($connection);
+                    }
+                    
+                }else{
+                    $projectInsert="INSERT INTO `project`( `project_name`, `project_desc`, `guideid`, `group_id`, `technologies`) VALUES ('". $projectName ."','". $projectDesc ."','". $guideRow['guide_id'] ."','". $newGroupId ."','". $technologies ."')";
+                    if (mysqli_query($connection, $projectInsert)) {
+                        // echo "New record created successfully";
+                        $projectId=mysqli_insert_id($connection);
+                        $deptName=$userDetails["department"];
+                        $divisionChar=$studentDetails["division"];
+                        if($divisionChar==1){
+                            $divisionChar="A";
+                        }else if($divisionChar==2){
+                            $divisionChar="B";
+                        }else{
+                            $divisionChar="C";
+                        }
+                        //ITA1
+                        //CPA1
+                        //ETA1
+                        $newProjectId=$deptName[0].$deptName[2].$divisionChar.$projectId;
+                        //Update Project Id in Project table and group table
+                        $updateProject="UPDATE `project` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
+                        if (mysqli_query($connection, $updateProject)) {
+                            $updateGroup="UPDATE `group_details` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
+                            if(mysqli_query($connection, $updateGroup)){
+                                echo"Success";
+                            }else{
+                                echo"Error in updating group";
+                            }
+                        }else{
+                            echo("Error in updating project");
+                        }
+                        
+                    } else {
+                        // Error in inserting project
+                        echo "Error: " . $projectInsert . "<br>" . mysqli_error($connection);
+                    }
+                }
+            }
         }else {
             echo "Error updating record: " . mysqli_error($connection);
         } 
-        $ProjectChecker="SELECT  `project_id` FROM `project` WHERE `group_id`='". $group_id ."'";
-        $ProjectCheckerresult = mysqli_query($connection, $ProjectChecker);        
-        //Update in morning (INSERT and UPDATE to PROJECT)
-        if(!mysqli_num_rows($ProjectCheckerresult) > 0){
-            $projectInsert="INSERT INTO `project`( `project_name`, `project_desc`, `guideid`, `group_id`, `project_link`, `technologies`) VALUES ('". $project_name ."',[value-6],[value-7],[value-9],[value-10],[value-11])";
-        }else{
-            $row = mysqli_fetch_assoc($ProjectCheckerresult);
-            $projectUpdate="UPDATE TABLE `project` SET `project_name`, `project_desc`, `guideid`, `group_id`, `project_link`, `technologies` WHERE project_id='". $row['project_id'] ."'";
-            
-        }
-        // Verify if group already exists.
-        $GroupChecker="SELECT  `group_id` FROM `group_details` WHERE `project_id`='". $row['project_id'] ."'";
-        $GroupCheckerresult = mysqli_query($connection, $GroupChecker);
-        $insertGroup="INSERT INTO `group_details`(`group_id`, `group_member_count`, `group_member_ids`, `group_member_names`, `guide_id`, `project_id`) VALUES ('". $group_id ."','". $count+1 ."','". $group_member_ids ."','". $group_member_names ."','". $guideRow['guide_id'] ."',[value-6])";
+        
+
+        
         /*
         if(is_null($studentDetails["group_id"])){
             
@@ -559,4 +725,3 @@
         // $studentQuery="UPDATE `student` SET ``"
     }
 ?>
-  
