@@ -3,16 +3,21 @@ let search_value="";
 const filterBy=(value)=>{
     search_value=value;
     for(i of search_reference){
-    // i.addEventListener("keyup",(event)=> {
-        // if (event.keyCode === 13 && i.value.length>0) {
-            // event.preventDefault();
-            location.href=`./search.php?value=${i.value}&filterBy=${search_value}`;
-        // }
-    // });
+        location.href=`./search.php?value=${i.value}&filterBy=${search_value}`;
     }
+    
 }
 
- 
+for(let i=0;i<search_reference.length;i++){
+    search_reference[i].addEventListener('input',()=>{
+        if(search_reference[i].value.length>0){
+            console.log(document.getElementsByClassName("search-dropdown")[i].innerHTML)
+            document.getElementsByClassName("search-dropdown")[i].disabled=false;
+        }else{
+            document.getElementsByClassName("search-dropdown")[i].disabled=true;
+        }
+    })
+}
 /*document.querySelector('.search-button').addEventListener("click",()=>{
     //event.preventDefault();
     // alert('Yo')

@@ -1,5 +1,6 @@
 <?php	
-    echo '<div class="navbar navbar-expand-lg navbar-light bg-default border-bottom border-default">
+    echo '
+    <div class="navbar navbar-expand-lg navbar-dark sticky-top bg-dark border-bottom border-default">
 		<a class="navbar-brand" href="./index.php">V-Projects</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -10,7 +11,7 @@
                 <a class="nav-link" href="./index.php">Home</a>
               </li>
               <li class="nav-item projects-option">
-                <a class="nav-link" href="#">Projects</a>
+                <a class="nav-link" href="./all_projects.php">Projects</a>
               </li>
               <li class="nav-item dropdown users-option">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,7 +32,7 @@
                     <input type="search" class="form-control rounded search-box" placeholder="Search" />
                     <div class="input-group-append bg-white">
                         <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search By</button>
+                            <button class="btn btn-outline-secondary dropdown-toggle search-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>Search By</button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <button class="dropdown-item" onclick="filterBy(`project`)">Project</button>
                                 <button class="dropdown-item" onclick="filterBy(`student`)">Student</button>
