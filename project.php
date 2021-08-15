@@ -23,9 +23,11 @@
 	<?php
 		include('./PHP/connect.php');
 		$row='';
+		$grouprow='';
 		
 		$sql = "SELECT * FROM `project` where `project_id`='". $projectID ."'";
-		
+		$groupDetails="SELECT `group_member_names` FROM `group_details` WHERE `project_id`='". $projectID ."'";
+
 		// $result = mysqli_query($connection, $sql);
 		// echo("ABC ".$result);
 		if ($result = mysqli_query($connection,$sql)) {
@@ -37,6 +39,17 @@
 			//query fails
 			echo(mysqli_error($connection));
 		}
+	?>
+	<?php
+		if ($groupresult = mysqli_query($connection,$groupDetails)) {
+		  $grouprow = mysqli_fetch_assoc($groupresult);
+		  // echo($row['project_name']);
+		  // Free result set
+		  mysqli_free_result($groupresult);
+		}else{
+			//query fails
+			echo(mysqli_error($connection));
+		}	
 	?>
 	
 	<!-- Project Link Modal -->
@@ -203,9 +216,12 @@ WHERE condition;"*/
 			<hr>
 			<!-- Group Member names -->
 			<h5>Group Members:</h5>
-				<p>Shardul Birje, 19101A2001</p>
+				<?php
+					echo"<p>".$grouprow['group_member_names']."</p>";
+				?>
+				<!-- <p>Shardul Birje, 19101A2001</p>
 				<p>Rohana Survase, 19101A2003</p>
-				<p>Sayali Khamgaonkar, 19101A2005</p>
+				<p>Sayali Khamgaonkar, 19101A2005</p> -->
 		</div>
 	</div>
 	<div class="project-table">
@@ -223,6 +239,14 @@ WHERE condition;"*/
 					</tr>
 				</thead>
 				<tbody>
+					<?php 
+						$selectUser="SELECT  `student_id` FROM `student` WHERE `group_id`='".$row['group_id']."'";
+						$selectresult = mysqli_query($connection, $selectUser);
+					 	$selectrow='';
+					 	if (mysqli_num_rows($selectresult) > 0) {
+					 	  $selectrow = mysqli_fetch_assoc($selectresult);
+						}	
+					 ?>
 					<tr>
 						<th scope="row">1</th>
 						<td>Project Report</td>
@@ -232,7 +256,14 @@ WHERE condition;"*/
 						<td>12.5 kb</td>
 						<td>
 							<!-- Display to Uploader-->
-							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileModal">Upload</button>
+							<?php 
+								if($selectrow['student_id']===$_SESSION['user_id']){
+									if(is_null($row['blackbook_link'])){
+										echo'<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileModal">Upload</button>';
+									}
+								}
+							 ?>
+							
 							<button type="button" class="btn btn-success">Download</button>
 							<!-- Visible to Uploader only -->
 							<button type="button" class="btn btn-danger">Delete</button>
@@ -241,6 +272,19 @@ WHERE condition;"*/
 					<tr>
 						<th scope="row">2</th>
 						<td>Research Paper</td>
+						<td>13 June 2021</td>
+						<td>Rohana Survase</td>
+						<td>121.5 kb</td>
+						<td>
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#fileModal">Upload</button>
+							<button type="button" class="btn btn-success">Download</button>
+							<!-- Visible to Uploader only -->
+							<button type="button" class="btn btn-danger">Delete</button>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>V-ideas Presentation</td>
 						<td>13 June 2021</td>
 						<td>Rohana Survase</td>
 						<td>121.5 kb</td>
@@ -289,7 +333,11 @@ WHERE condition;"*/
 		<div class="container">
 			<div class="d-flex justify-content-between align-items-center py-4">
 				<h2>Other Details</h2>
-				<button class="btn btn-secondary" data-toggle="modal" data-target="#detailModal">Add Other Details</button>
+				<?php 
+					if(is_null($row['other_details'])){
+						echo '<button class="btn btn-secondary" data-toggle="modal" data-target="#detailModal">Add Other Details</button>';
+					}
+				 ?>
 			</div>
 			<ul class="list-group">
 				<l1 class="list-group-item">Winner of A Competition</l1>
@@ -322,7 +370,7 @@ WHERE condition;"*/
 		$fileExt=explode('.', $fileName);
 		$fileActualExt=strtolower(end($fileExt));
 		//Allowed Extensions
-		$allowed=array('html','css','js','java','pdf','docx','doc','png','jpeg','jpg','odf','xlsx');
+		$allowed=array('pdf','docx','doc','png','jpeg','jpg','odf');
 		//Check for extension
 		if(in_array($fileActualExt,$allowed)){
 			//If no error in file upload
@@ -331,7 +379,7 @@ WHERE condition;"*/
 				if($fileSize < 15000000){
 					//Creates unique ID based on the current microseconds
 					$fileNameNew = uniqid('',true).'.'.$fileActualExt;
-					$target_dir = "Uploads/".$fileNameNew;
+					$target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
 					move_uploaded_file($fileTemp, $target_dir);
 					echo 
 					"<script>

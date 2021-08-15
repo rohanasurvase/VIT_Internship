@@ -20,7 +20,7 @@
         if(!isset($_SESSION['user_id'])){
             echo "<script> location.href='./LoginPage.php'; </script>";
         }
-        require('./PHP/header.php')
+        require('./PHP/header.php');
     ?>
     <?php
     //SELECT PROJECT
@@ -32,19 +32,38 @@
             $selectStudentDetails="SELECT * FROM `student` WHERE `student_id`='". $userID ."'";
             $studentQueryResult = mysqli_query($connection, $selectStudentDetails);
             $studentDetails = mysqli_fetch_assoc($studentQueryResult);
-        }
-        
-        
-        
-                                
+        }                           
         // echo($userDetails);
     ?>
     <?php 
+    if($userDetails['type']==="student"){
         if (!is_null($studentDetails['group_id'])) {
             // echo("Yo");
-            $selectGroupDetails="SELECT * FROM `group_details` WHERE `group_id`='". $studentDetails['group_id'] ."'";    
+            $selectGroupDetails="SELECT * FROM `group_details` WHERE `group_id`='". $studentDetails['group_id'] ."'";
+            $selectGroupResult=mysqli_query($connection, $selectGroupDetails);    
+            $groupDetails=mysqli_fetch_assoc($selectGroupResult);
+            $groupMember1ID='';
+            $groupMember2ID='';
+            $groupids=$groupDetails['group_member_ids'];
+            $groupids=explode(',', $groupids);
+            $index=array_search($userID, $groupids);
+            array_splice($groupids,$index,1);
+            if($groupDetails['group_member_count']==2){
+                $groupMember1ID=$groupids[0];
+            }else{
+                $groupMember1ID=$groupids[0];
+                $groupMember2ID=$groupids[1];
+            }
             $selectProjectDetails="SELECT `project_id`,`project_name`,`project_desc`,`guideid`,`technologies` FROM `project` WHERE `group_id`='". $studentDetails['group_id'] ."'";
+            $selectProjectResult=mysqli_query($connection, $selectProjectDetails);    
+            $projectDetails=mysqli_fetch_assoc($selectProjectResult);
         }
+    }else{
+        // For Guide
+        $selectProjectDetails="SELECT `project_id`,`project_name`,`project_desc`,`guideid`,`technologies` FROM `project` WHERE `guideid`='". $userID ."'";
+        $selectProjectResult=mysqli_query($connection, $selectProjectDetails);    
+        $projectDetails=mysqli_fetch_assoc($selectProjectResult);
+    }
     ?>
     <!-- Profile details update -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
@@ -152,22 +171,39 @@
                 <p style="color:red">Items marked <b>*</b> cannot be updated once inserted</p>
                 <div class="form-group">
                     <label for="project-name" class="col-form-label">Project Name</label>
-                    <input type="text" class="form-control" id="project-name" name="project-name" required>
+                    <input type="text" class="form-control" id="project-name" name="project-name" value="<?php 
+                        if(isset($projectDetails['project_name'])){
+                            echo $projectDetails['project_name'];
+                        }else{
+                            echo('');
+                        } ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="project-link" class="col-form-label">Project link</label>
-                    <input type="text" class="form-control" id="project-link" name="project-link">
+                    <input type="text" class="form-control" id="project-link" name="project-link" value="<?php 
+                        if(isset($projectDetails['project_link'])){
+                            echo $projectDetails['project_link'];
+                        }else{
+                            echo('Enter Link');
+                        } ?>">
                 </div>
                 <div class="form-group">
                     <label for="project-technologies" class="col-form-label">Techonologies used</label>
-                    <input type="text" class="form-control" id="project-technologies" placeholder="eg: HTML, CSS" data-toggle="tooltip" data-placement="right" title="Use commas for entering multiple Techonologies/languages" name='skills' required>
+                    <input type="text" class="form-control" id="project-technologies" placeholder="eg: HTML, CSS" data-toggle="tooltip" data-placement="right" title="Use commas for entering multiple Techonologies/languages" name='skills' value="<?php
+                        if(isset($projectDetails['technologies'])){
+                            echo $projectDetails['technologies'];
+                        }else{
+                            echo('');
+                        }
+
+                    ?>" required>
                     <!-- <button class="btn btn-secondary" id='skills-submit'>Add</button> -->
                     <!-- <p class="skills" id='skills-box'> -->
                         
                     </p>
                 </div>
                 <div class="form-group">
-                    <label for="project-guide" class="col-form-label">Guide Name <span style="color:red">*</span></label>
+                    <label for="project-guide" class="col-form-label">Guide Code <span style="color:red">*</span></label>
                     <input type="text" class="form-control" id="project-guide" name="project-guide" placeholder='Enter guide code' data-toggle="tooltip" data-placement="right" title="For eg:Enter RS for Rohana Survase" value="<?php  
                         if(isset($studentDetails['guide_id'])){
                             $GuideName="SELECT `guide_code` FROM `guide` where `guide_id`='". $studentDetails['guide_id'] ."'";
@@ -175,23 +211,56 @@
                             if (mysqli_num_rows($result) > 0) {
                                 $row = mysqli_fetch_assoc($result);
                                 echo $row['guide_code'];
+                            }else{
+                                echo "";
                             }
                         }
                     ?>" required>
                 </div>
                 <div class="form-group">
                     <label for="member-count" class="col-form-label">Group Member count <span style="color:red">*</span></label>
-                    <input type="number" class="form-control" id="member-count" name="member-count" placeholder="Member count (excluding you)" required>
+                    <input type="number" class="form-control" id="member-count" name="member-count" placeholder="Member count (excluding you)" value="<?php
+                        if(isset($groupDetails['group_member_count'])){
+                            echo($groupDetails['group_member_count']-1); 
+                        }else{
+                            echo 0;
+                        }?>" required>
                     <p id="error-text"></p>
                 </div>
                 <div class="row">
                     <div class="col member-input-container hide" >
                         <label for="member-1">Member Email <span style="color:red">*</span></label>
-                        <input type="email" class=" form-control" placeholder="Member 1 Email" id="member-1" name="member-1">
+                        <input type="email" class=" form-control" placeholder="Member 1 Email" id="member-1" name="member-1" value="<?php
+                            if(isset($groupMember1ID)){
+                                $selectMember1email="SELECT `email` FROM `user_info` WHERE `user_id`='". $groupMember1ID ."'";
+                                $Member1result = mysqli_query($connection, $selectMember1email);
+                                if (mysqli_num_rows($Member1result) > 0){
+                                    $row = mysqli_fetch_assoc($Member1result);
+                                    echo($row['email']);    
+                                }else{
+                                    echo '';
+                                }
+                            }else{
+                                echo('');
+                            }
+                        ?>">
                     </div>
                     <div class="col member-input-container hide">
                         <label for="member-2">Member Email <span style="color:red">*</span></label>
-                        <input type="email" class="form-control" placeholder="Member 2 Email" id='member-2' name="member-2">
+                        <input type="email" class="form-control" placeholder="Member 2 Email" id='member-2' name="member-2" value="<?php
+                            if(isset($groupMember2ID)){
+                                $selectMember2email="SELECT `email` FROM `user_info` WHERE `user_id`='". $groupMember2ID ."'";
+                                $Member2result = mysqli_query($connection, $selectMember2email);
+                                if (mysqli_num_rows($Member2result) > 0){
+                                    $row = mysqli_fetch_assoc($Member2result);
+                                    echo($row['email']);    
+                                }else{
+                                    echo '';
+                                }
+                            }else{
+                                echo('');
+                            }
+                        ?>">
                     </div>
                 </div>
                 <!-- <div class="form-group member-input-container">
@@ -200,7 +269,14 @@
                 </div> -->
                 <div class="form-group">
                     <label for="project-desc" class="col-form-label">Project Description</label>
-                    <textarea class="form-control" id="project-desc" name="project-desc" required></textarea>
+                    <textarea class="form-control" id="project-desc" name="project-desc" 
+                     required><?php 
+                        if(isset($projectDetails['technologies'])){
+                            echo $projectDetails['technologies'];
+                        }else{
+                            echo('');
+                        }?>
+                    </textarea>
                 </div>
                 
                 
@@ -300,6 +376,38 @@
                                     </button>';
                                 }
                             ?>
+                            <?php 
+                                if($userDetails['type']==="student"){
+                                    $GuideName="SELECT `username` FROM `user_info` where `user_id`='". $studentDetails['guide_id'] ."'";
+                                   $Guideresult = mysqli_query($connection, $GuideName);
+                                   $Guiderow='';
+                                   if (mysqli_num_rows($Guideresult) > 0) {
+                                        $Guiderow = mysqli_fetch_assoc($Guideresult);
+                                    }
+                                    echo'
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                        '.$projectDetails["project_name"].'
+                                        </div>
+                                        <div class="card-body">
+                                           <h5 class="card-title">Guide Name: '.$Guiderow["username"].'</h5>
+                                            <p class="card-text">
+                                                '.$projectDetails["project_desc"].'
+                                            </p>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Group Members: '.$groupDetails["group_member_names"].'</p>
+                                            <p>Technology used: '.$projectDetails["technologies"].'
+                                            </p>
+                                            <a href="./project.php?id='.$projectDetails["project_id"].'" class="btn btn-primary">View Project</a>
+                                        </div>
+                                    </div>
+                           ';
+                                }
+
+
+
+                             ?>
                            <!-- <div class="card mb-4">
                                 <div class="card-header">
                                    BookBarn: Web Based Book Recommendation and E-commerce System
