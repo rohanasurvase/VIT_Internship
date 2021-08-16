@@ -16,4 +16,23 @@ const displayFile=()=>{
 		reader.readAsDataURL(i)	
 	}	
 }
-
+const displayPaper=()=>{
+	let input_files=ids('paperInput');
+	for(let i of input_files.files){
+		let reader= new FileReader();
+		//ids('display_file_name').innerText=i.name;
+		let src= URL.createObjectURL(i);
+		 ids('display_paper_name').innerHTML+=`<a href="${src}" target="_blank">${i.name}</a><br>`;
+		reader.readAsDataURL(i)	
+	}	
+}
+const displayVidea=()=>{
+	let input_files=ids('videaInput');
+	for(let i of input_files.files){
+		let reader= new FileReader();
+		//ids('display_file_name').innerText=i.name;
+		let src= URL.createObjectURL(i);
+		 ids('display_videa_name').innerHTML+=`<a href="${src}" target="_blank">${i.name}</a><br>`;
+		reader.readAsDataURL(i)	
+	}	
+}
