@@ -109,9 +109,9 @@
 			}
 		}
 	}
-    /*if(!isset($_SESSION['userid']) && !$_SESSION['loggedin']==true){
-        echo "<script> location.href='./loginPage.php'; </script>";
-    }*/
+    if(!isset($_SESSION['user_id'])){
+        echo "<script> location.href='./LoginPage.php'; </script>";
+    }
 ?>
 <?php 
 	if (isset($_POST['addDetails'])) {
@@ -134,7 +134,7 @@
 			}
 		}
 	}else{
-		echo "Error: ".mysqli_error($connection);
+		// echo "Error: YO".mysqli_error($connection);
 	}
 
  ?>

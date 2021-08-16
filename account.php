@@ -36,6 +36,7 @@
         // echo($userDetails);
     ?>
     <?php 
+    $selectProjectResult='';
     if($userDetails['type']==="student"){
         if (!is_null($studentDetails['group_id'])) {
             // echo("Yo");
@@ -60,9 +61,12 @@
         }
     }else{
         // For Guide
-        $selectProjectDetails="SELECT `project_id`,`project_name`,`project_desc`,`guideid`,`technologies` FROM `project` WHERE `guideid`='". $userID ."'";
-        $selectProjectResult=mysqli_query($connection, $selectProjectDetails);    
-        $projectDetails=mysqli_fetch_assoc($selectProjectResult);
+        //$selectProjectDetails="SELECT `project_id`,`project_name`,`project_desc`,`technologies` FROM `project` WHERE `guideid`='". $userID ."'";
+        $selectProjectDetails="SELECT `project_name`,`project_desc`,`technologies`,`group_member_names`,`project`.`project_id` 
+        FROM `project` 
+        INNER JOIN `group_details` ON `guideid`=`guide_id`
+        WHERE `guideid`='".$userID."'";
+        
     }
     ?>
     <!-- Profile details update -->
@@ -78,6 +82,7 @@
                 <div class="modal-body">
                     <form method="POST" action="">
                         <div class="row">
+                            
                             <div class="col">
                                 <label for="first-name">First Name</label>
                                 <input type="text" class=" form-control" placeholder="First Name" id="first-name" name="first-name" value="<?php 
@@ -101,6 +106,13 @@
                             ?>">
                             </div>
                         </div>
+ <!--                        <div class="form-group">
+                            <label for="image">Enter Profile Image</label>
+                            <div class="custom-file">
+                              <input type="file" name='file' class="custom-file-input" id="fileInput">
+                              <label class="custom-file-label" for="fileInput">Choose profile image</label>
+                            </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="profile-branch" class="col-form-label">Department</label>
                             <input type="text" class="form-control" id="profile-branch" placeholder="Enter Department code" name="department" data-toggle="tooltip" data-placement="right" title="eg-INFT/CMPN" value="<?php 
@@ -123,6 +135,21 @@
                                 echo'<div class="form-group">
                                 <label for="profile-division" class="col-form-label">Division</label>
                                 <input type="text" class="form-control" id="profile-division" placeholder="Enter Division" name="division" data-toggle="tooltip" data-placement="right" title="eg-1/2" value="'.$division.'">
+                                </div>
+                                ';
+                            }else{
+                                $guideCodeRow='';
+                                $SelectGuideCode="SELECT `guide_code` FROM `guide` WHERE `guide_id`='". $userID ."'";
+                                $GuideCodeResult=mysqli_query($connection,$SelectGuideCode);
+                                if(mysqli_num_rows($GuideCodeResult)>0){
+                                    $guideCodeRow=mysqli_fetch_assoc($GuideCodeResult);
+                                    $guideCode=$guideCodeRow['guide_code'];
+                                }else{
+                                    $guideCode='';
+                                }
+                                echo'<div class="form-group">
+                                <label for="profile-guide-code" class="col-form-label">Guide Code</label>
+                                <input type="text" class="form-control" id="profile-guide-code" placeholder="Enter Code" name="guide-code" data-toggle="tooltip" data-placement="right" title="eg-IJA, RB, DJS" value="'.$guideCode.'">
                                 </div>
                                 ';
                             }
@@ -204,7 +231,7 @@
                 </div>
                 <div class="form-group">
                     <label for="project-guide" class="col-form-label">Guide Code <span style="color:red">*</span></label>
-                    <input type="text" class="form-control" id="project-guide" name="project-guide" placeholder='Enter guide code' data-toggle="tooltip" data-placement="right" title="For eg:Enter RS for Rohana Survase" value="<?php  
+                    <input type="text" class="form-control" id="project-guide" name="project-guide" placeholder='Enter guide code' data-toggle="tooltip" data-placement="right" title="For eg:IJA, RB, DJS" value="<?php  
                         if(isset($studentDetails['guide_id'])){
                             $GuideName="SELECT `guide_code` FROM `guide` where `guide_id`='". $studentDetails['guide_id'] ."'";
                             $result = mysqli_query($connection, $GuideName);
@@ -403,47 +430,40 @@
                                         </div>
                                     </div>
                            ';
+                                }else{
+                                   $selectProjectResult=mysqli_query($connection, $selectProjectDetails);    
+                                    // $SelectGroupMembers="SELECT `group_member_names` FROM `group_details` WHERE `guide_id`='"$userID"'";
+                                    // $selectGroupResult=mysqli_query($connection, $selectGroupMembers);
+                                    if (mysqli_num_rows($selectProjectResult) > 0) {
+
+                                        while($projectDetails=mysqli_fetch_assoc($selectProjectResult)){
+
+                                            echo'
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                '.$projectDetails["project_name"].'
+                                                </div>
+                                                <div class="card-body">
+                                                   <h5 class="card-title">Guide Name: '.$userDetails["username"].'</h5>
+                                                    <p class="card-text">
+                                                        '.$projectDetails["project_desc"].'
+                                                    </p>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Group Members: '.$projectDetails["group_member_names"].'</p>
+                                                    <p>Technology used: '.$projectDetails["technologies"].'
+                                                    </p>
+                                                    <a href="./project.php?id='.$projectDetails["project_id"].'" class="btn btn-primary">View Project</a>
+                                                </div>
+                                            </div> ';   
+                                        }
+                                    }
+
                                 }
 
 
 
                              ?>
-                           <!-- <div class="card mb-4">
-                                <div class="card-header">
-                                   BookBarn: Web Based Book Recommendation and E-commerce System
-                                </div>
-                                <div class="card-body">
-                                   <h5 class="card-title">Guide Name: Deepali Shrikhande</h5>
-                                    <p class="card-text">
-                                        BookBarn is a website that would allow users to buy, sell as well as rent books all at a single place. The website would further recommend books to the users based on their
-                                        buying/search history and based on similar user's preferences.
-                                    </p>
-                                </div>
-                                <div class="card-body">
-                                    <p>Group Members: Rohana Survase, Sayali Khamgaonkar</p>
-                                    <--<p>Technology used: HTML, CSS, Javascript, SQL, PHP, Python. --
-                                    </p>
-                                    <a href="#" class="btn btn-primary">View Project</a>
-                                </div>
-                           </div>
-                           <div class="card mb-2">
-                                <div class="card-header">
-                                   BookBarn: Web Based Book Recommendation and E-commerce System
-                                </div>
-                                <div class="card-body">
-                                   <h5 class="card-title">Guide Name: Deepali Shrikhande</h5>
-                                    <p class="card-text">
-                                        BookBarn is a website that would allow users to buy, sell as well as rent books all at a single place. The website would further recommend books to the users based on their
-                                        buying/search history and based on similar user's preferences.
-                                    </p>
-                                </div>
-                                <div class="card-body">
-                                    <p>Group Members: Rohana Survase, Sayali Khamgaonkar</p>
-                                    <-- <p>Technology used: HTML, CSS, Javascript, SQL, PHP, Python. ->
-                                    </p>
-                                    <a href="#" class="btn btn-primary">View Project</a>
-                                </div>
-                           </div> -->
                         </div>         
                    </div>
                    <?php
@@ -523,6 +543,72 @@
 <!-- For Profile Details -->
 <?php 
     if (isset($_POST['details-submit'])) {
+            /*$file=$_FILES['file'];  
+            // File Name
+            $fileName=$_FILES['file']['name'];
+            // File temporary Name
+            $fileTemp=$_FILES['file']['tmp_name'];
+            // File Size
+            $fileSize=$_FILES['file']['size'];
+            //File Error
+            $fileError=$_FILES['file']['error'];
+            //Type
+            $fileType=$_FILES['file']['type'];
+            //Extension
+            $fileExt=explode('.', $fileName);
+            $fileActualExt=strtolower(end($fileExt));
+            //Allowed Extensions
+            $allowed=array('png','jpeg','jpg');
+            //Check for extension
+            if(in_array($fileActualExt,$allowed)){
+                //If no error in file upload
+                if($fileError === 0){
+                    // FileSize less than 15 MB
+                    if($fileSize < 10000000){
+                        //Creates unique ID based on the current microseconds
+                        $fileNameNew = uniqid('',true).'.'.$fileActualExt;
+                        $target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
+                        move_uploaded_file($fileTemp, $target_dir);
+                        $insertDocument="UPDATE `user_info` SET `image`='./". $target_dir ."'";
+                        if (mysqli_query($connection, $insertDocument)) {
+                          echo "New record created successfully";
+                        } else {
+                          echo "Error in updating file record";
+                        }
+
+                        echo 
+                        "<script>
+                        document.getElementById('success-text').innerText='The File was successfully uploaded!';
+                        $('#success-modal').modal()</script>
+                        ";
+                        
+                    }
+
+                    else{
+                        echo'
+                        <script>
+                            document.getElementById("error-text").innerText="Your File is too big: '.$fileSize.' kbs";
+                            $("#error-modal").modal()
+                        </script>
+                        ';
+                    }
+                }else{
+                    echo'
+                        <script>
+                            document.getElementById("error-text").innerText="Error in uploading file.";
+                            $("#error-modal").modal()
+                        </script>
+                        ';
+                }
+
+            }else{
+                echo'
+                    <script>
+                        document.getElementById("error-text").innerText="Invalid File Type.";
+                        $("#error-modal").modal()
+                    </script>
+                ';
+            }*/
         $firstName = $_POST['first-name'];
         $lastName=$_POST['last-name'];
         $name=$firstName.' '.$lastName;     
@@ -539,12 +625,14 @@
             $division_info=$_POST['division'];
             $year=$_POST['pass-year'];
             $studentQuery="UPDATE `student` SET `batch`='". $year ."', `division`='". $division_info ."' WHERE `student_id`='". $userID ."'";
-            if (mysqli_query($connection, $studentQuery)) {
-              echo "<script>
-                $('#editProfileModal').modal('hide');
-              </script>";
-            } else {
-              echo "Error updating record: " . mysqli_error($connection);
+            if (!mysqli_query($connection, $studentQuery)) {
+                echo "Error updating record: " . mysqli_error($connection);  
+            }
+        }else{
+            $guideCode=$_POST['guide-code'];
+            $guideQuery="UPDATE `guide` SET `guide_code`='".$guideCode."'";
+            if (!mysqli_query($connection, $studentQuery)) {
+                echo "Error updating record: " . mysqli_error($connection);  
             }
         }
         // $studentQuery="UPDATE `student` SET ``"
