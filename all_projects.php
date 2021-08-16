@@ -13,72 +13,36 @@
   require('./PHP/header.php');
 
   ?>
+
   <div class="container my-4">
   <div class="row" id="myItems">
     <div class="col-sm-12 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Project Name</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">This is a description for the project</h6>
-          <p class="card-text">Keywords: HTML, CSS, Javascript</p>
-        </div>
-      </div>
+      <?php
+          
+            $sql = "SELECT project_id, project_name, project_desc, technologies FROM project";
+            $result = mysqli_query($connection, $sql);
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Card Two</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>
+            if (mysqli_num_rows($result) > 0) {
+              // output data of each row
+              while($row = mysqli_fetch_assoc($result)) 
+              {
+                echo('
+                <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title"><a href="project.php?id='.$row["project_id"].'">'. $row["project_name"] .'</a></h5>
+                      <h6 class="card-subtitle mb-2 text-muted">'. $row["project_desc"] .'</h6>
+                      <p class="card-text">Technologies: '. $row["technologies"].'</p>
+                    </div>
+                    </div>
+                    ');
+              }
+            } else {
+              echo "0 results";
+            }
 
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Card Three</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Card Four</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Card Five</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Card Six</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Card Seven</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><a href="#">Card Eight</a></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some text.</p>
-        </div>
-      </div>      
+      ?>
+     
+             
     </div>    
   </div>
 </div>
