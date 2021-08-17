@@ -36,3 +36,13 @@ const displayVidea=()=>{
 		reader.readAsDataURL(i)	
 	}	
 }
+const displayImage=()=>{
+	let input_files=ids('profileInput');
+	for(let i of input_files.files){
+		let reader= new FileReader();
+		//ids('display_file_name').innerText=i.name;
+		let src= URL.createObjectURL(i);
+		 ids('display_image_name').innerHTML+=`<a href="${src}" target="_blank">${i.name}</a><br>`;
+		reader.readAsDataURL(i)	
+	}	
+}

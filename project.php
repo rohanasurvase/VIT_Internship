@@ -650,7 +650,7 @@
 <?php 
 	if (isset($_POST['DeleteFile'])) {
 		$updateProject="UPDATE `project` SET `blackbook_link`=NULL WHERE `project_id`='". $projectID ."'";
-		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/research.pdf')){
+		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/report.pdf')){
 			$del=unlink('./Uploads/'.$_SESSION['user_id'].'/report.pdf');
 			if($del=="true"){
 				if (!mysqli_query($connection, $updateProject)) {
@@ -841,8 +841,8 @@
  <?php 
 	if (isset($_POST['DeleteVidea'])) {
 		$updateProject="UPDATE `project` SET `videa_link`=NULL WHERE `project_id`='". $projectID ."'";
-		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/research.pdf')){
-			$del=unlink('./Uploads/'.$_SESSION['user_id'].'/videa.pptx');
+		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/videa.pdf')){
+			$del=unlink('./Uploads/'.$_SESSION['user_id'].'/videa.pdf');
 			if($del=="true"){
 				if (!mysqli_query($connection, $updateProject)) {
 					echo"Update Failed";

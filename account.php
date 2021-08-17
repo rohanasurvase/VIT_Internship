@@ -80,6 +80,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <p style="color:red">Items marked <b>*</b> cannot be updated once inserted</p>
                     <form method="POST" action="">
                         <div class="row">
                             
@@ -114,30 +115,41 @@
                             </div>
                         </div> -->
                         <div class="form-group">
-                            <label for="profile-branch" class="col-form-label">Department</label>
-                            <input type="text" class="form-control" id="profile-branch" placeholder="Enter Department code" name="department" data-toggle="tooltip" data-placement="right" title="eg-INFT/CMPN" value="<?php 
-                                if(isset($userDetails["department"])){
-                                    echo $userDetails["department"];
+                            
+                            <?php
+                                $department='';
+                                $readonly=""; 
+                                if(!is_null($userDetails["department"])){
+                                    $department=$userDetails["department"];
+                                    $readonly="readonly";
                                 }else{
-                                    echo "";
+                                    $department='';
+                                    $readonly="";
                                 }
-                            ?>">
+                                echo'
+                                <label for="profile-branch" class="col-form-label">Department <span style="color:red">*</span></label>
+                                <input type="text" class="form-control" id="profile-branch" placeholder="Enter Department code" name="department" data-toggle="tooltip" data-placement="right" title="eg-INFT/CMPN" value="'.$department.'" '.$readonly.'>';
+                             ?>
+                            
                         </div>
                         
                         <?php
                             $division='';
-                            if(isset($studentDetails["division"])){
+                            $readonly="";
+                            if(isset($studentDetails["division"]) && $studentDetails["division"]!=0){
+                                $readonly="readonly";
                                 $division=$studentDetails["division"];
                             }else{
                                 $division="";
+                                $readonly="";
                             }
                             if($userDetails["type"]==="student"){
                                 echo'<div class="form-group">
-                                <label for="profile-division" class="col-form-label">Division</label>
-                                <input type="text" class="form-control" id="profile-division" placeholder="Enter Division" name="division" data-toggle="tooltip" data-placement="right" title="eg-1/2" value="'.$division.'">
+                                <label for="profile-division" class="col-form-label">Division <span style="color:red">*</span></label>
+                                <input type="text" class="form-control" id="profile-division" placeholder="Enter Division" name="division" data-toggle="tooltip" data-placement="right" title="eg-1/2" value="'.$division.'"'.$readonly.'>
                                 </div>
                                 ';
-                            }else{
+                            }else if($userDetails["type"]==="guide"){
                                 $guideCodeRow='';
                                 $SelectGuideCode="SELECT `guide_code` FROM `guide` WHERE `guide_id`='". $userID ."'";
                                 $GuideCodeResult=mysqli_query($connection,$SelectGuideCode);
@@ -298,8 +310,8 @@
                     <label for="project-desc" class="col-form-label">Project Description</label>
                     <textarea class="form-control" id="project-desc" name="project-desc" 
                      required><?php 
-                        if(isset($projectDetails['technologies'])){
-                            echo $projectDetails['technologies'];
+                        if(isset($projectDetails['project_desc'])){
+                            echo $projectDetails['project_desc'];
                         }else{
                             echo('');
                         }?>
@@ -321,16 +333,17 @@
     
 	<div class="container-fluid account-section mt-3">
         <div class="row my-4">
-	        <div class="col-lg-4 border-right border-default">
-                <div class="container">
+	        <div class="col-lg-4 col-12 border-right border-default">
+                <div class="container text-center">
                     <img src="<?php
                        echo $userDetails['image'];
                     ?>" alt="Profile" class="img-fluid rounded d-block mx-auto" style="height: 30vh; position:relative;">
-                    <!-- Tablet Updates needed -->
+                    <button class="btn btn-outline-secondary mt-3" data-toggle="modal" data-target="#profileModal"><i class="fas fa-camera"></i></button>
+                    
                     <div class="profile-details my-2 container mx-auto" style="padding-bottom: 5em;">
                         <div class="d-flex justify-content-center">
                             
-                            <div class="text-center pr-lg-3 pl-lg-0 pl-5">
+                            <div class="text-center">
                                 <h5><?php
                                     echo $userDetails['username']; //19101A2001
                                 ?></h5>
@@ -363,12 +376,42 @@
                     </div>
                 </div>     
            </div>
-           <div class="col-md-8">
+           <!-- Upload Image  -->
+           <div class="modal fade" id="profileModal" tabindex="-1" role="dialog">
+               <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <h5 class="modal-title">Change Profile Image</h5>
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                             <span aria-hidden="true">&times;</span>
+                           </button>
+                       </div>
+                       <div class="modal-body">
+                           <p style="color:red">Note: Select a square image</p>
+                           <form method="post" enctype="multipart/form-data" class="d-flex justify-content-stretch w-100">
+                               <div class="input-group mb-3">
+                                   <div class="custom-file">
+                                       <input type="file" name='file' class="custom-file-input" id="profileInput" onchange="displayImage()">
+                                       <label class="custom-file-label" for="profileInput">Choose Image</label>
+                                   </div>
+                                   <div class="input-group-append">
+                                       <button type="submit" class="btn input-group-text" name="profile-submit" id="profile-submit">Upload</button>
+                                   </div>
+                               </div>
+                           </form>
+                           <div id="display_image_name">
+                               
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div class="col-lg-8">
                <div class="container">
                    <!-- <h2>Account Details</h2>  -->
                    
                    <div class="projects">
-                        <div class="d-flex justify-content-between align-items-center py-3">
+                        <div class="d-lg-flex justify-content-between align-items-center py-3">
                             <h2>Project Details</h2>
                             
                         </div>
@@ -486,7 +529,7 @@
     <?php
         require('./PHP/footer.php')
     ?>
-
+    <script src="./JS/project_script.js"></script>
     <script>
         let count=document.getElementById('member-count');
         count.addEventListener('input', ()=>{
@@ -539,76 +582,90 @@
     ?>
 </body>
 </html>
+<!-- Profile Image -->
+<?php 
+if (isset($_POST["profile-submit"])) {
+    $file=$_FILES['file'];  
+    // File Name
+    $fileName=$_FILES['file']['name'];
+    // File temporary Name
+    $fileTemp=$_FILES['file']['tmp_name'];
+    // File Size
+    $fileSize=$_FILES['file']['size'];
+    //File Error
+    $fileError=$_FILES['file']['error'];
+    //Type
+    $fileType=$_FILES['file']['type'];
+    //Extension
+    $fileExt=explode('.', $fileName);
+    $fileActualExt=strtolower(end($fileExt));
+    //Allowed Extensions
+    $allowed=array('png','jpeg','jpg');
+    //Check for extension
+    if(in_array($fileActualExt,$allowed)){
+        //If no error in file upload
+        if($fileError === 0){
+            // FileSize less than 10 MB
+            if($fileSize < 10000000){
+                //Creates unique ID based on the current microseconds
+                $fileNameNew = 'profile'.'.'.$fileActualExt;
+                $target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
+                $insertDocument="UPDATE `user_info` SET `image`='./".$target_dir."' WHERE `user_id`='".$userID."'";
+                $del='';
+                if (mysqli_query($connection, $insertDocument)) {
+                    if(file_exists('./Uploads/'.$_SESSION['user_id'].'/profile.png')){
+                        $del=unlink('./Uploads/'.$_SESSION['user_id'].'/profile.png');
+                    }else if (file_exists('./Uploads/'.$_SESSION['user_id'].'/profile.jpg')) {
+                        $del=unlink('./Uploads/'.$_SESSION['user_id'].'/profile.jpg');
+                    }else if (file_exists('./Uploads/'.$_SESSION['user_id'].'/profile.jpeg')){
+                        $del=unlink('./Uploads/'.$_SESSION['user_id'].'/profile.jpeg');
+                    }
+                    move_uploaded_file($fileTemp, $target_dir);
+                    echo 
+                    "<script>
+                    document.getElementById('success-text').innerText='The File was successfully uploaded!';
+                    $('#success-modal').modal()</script>
+                    ";
+                } else {
+                  echo "Error in updating file record";
+                }               
+                
+            }
 
+            else{
+                echo'
+                <script>
+                    document.getElementById("error-text").innerText="Your File is too big: '.$fileSize.' kbs";
+                    $("#error-modal").modal()
+                </script>
+                ';
+            }
+        }else{
+            echo'
+                <script>
+                    document.getElementById("error-text").innerText="Error in uploading file.";
+                    $("#error-modal").modal()
+                </script>
+                ';
+        }
+
+    }else{
+        echo'
+            <script>
+                document.getElementById("error-text").innerText="Invalid File Type.";
+                $("#error-modal").modal()
+            </script>
+        ';
+    }
+}
+
+
+
+ ?>
 <!-- For Profile Details -->
 <?php 
     if (isset($_POST['details-submit'])) {
-            /*$file=$_FILES['file'];  
-            // File Name
-            $fileName=$_FILES['file']['name'];
-            // File temporary Name
-            $fileTemp=$_FILES['file']['tmp_name'];
-            // File Size
-            $fileSize=$_FILES['file']['size'];
-            //File Error
-            $fileError=$_FILES['file']['error'];
-            //Type
-            $fileType=$_FILES['file']['type'];
-            //Extension
-            $fileExt=explode('.', $fileName);
-            $fileActualExt=strtolower(end($fileExt));
-            //Allowed Extensions
-            $allowed=array('png','jpeg','jpg');
-            //Check for extension
-            if(in_array($fileActualExt,$allowed)){
-                //If no error in file upload
-                if($fileError === 0){
-                    // FileSize less than 15 MB
-                    if($fileSize < 10000000){
-                        //Creates unique ID based on the current microseconds
-                        $fileNameNew = uniqid('',true).'.'.$fileActualExt;
-                        $target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
-                        move_uploaded_file($fileTemp, $target_dir);
-                        $insertDocument="UPDATE `user_info` SET `image`='./". $target_dir ."'";
-                        if (mysqli_query($connection, $insertDocument)) {
-                          echo "New record created successfully";
-                        } else {
-                          echo "Error in updating file record";
-                        }
-
-                        echo 
-                        "<script>
-                        document.getElementById('success-text').innerText='The File was successfully uploaded!';
-                        $('#success-modal').modal()</script>
-                        ";
-                        
-                    }
-
-                    else{
-                        echo'
-                        <script>
-                            document.getElementById("error-text").innerText="Your File is too big: '.$fileSize.' kbs";
-                            $("#error-modal").modal()
-                        </script>
-                        ';
-                    }
-                }else{
-                    echo'
-                        <script>
-                            document.getElementById("error-text").innerText="Error in uploading file.";
-                            $("#error-modal").modal()
-                        </script>
-                        ';
-                }
-
-            }else{
-                echo'
-                    <script>
-                        document.getElementById("error-text").innerText="Invalid File Type.";
-                        $("#error-modal").modal()
-                    </script>
-                ';
-            }*/
+            
         $firstName = $_POST['first-name'];
         $lastName=$_POST['last-name'];
         $name=$firstName.' '.$lastName;     
@@ -663,20 +720,15 @@
         if(mysqli_num_rows($guideResult) > 0){
             $guideRow = mysqli_fetch_assoc($guideResult);
             //echo $count;
-            
-            //print_r($guideRow);
             // Only One Member
             if($count==1){
-                //Selects Email of member
+                //Selects ID of member based on email
                 $memberCheck="SELECT `user_id` FROM `user_info` WHERE `email`='". $member1 ."'";
                 $memberResult = mysqli_query($connection, $memberCheck);
                 if(mysqli_num_rows($memberResult) > 0){
                      $memberRow = mysqli_fetch_array($memberResult, MYSQLI_NUM);
                     //$memberRow = mysqli_fetch_assoc($memberResult);
                     array_push($value,$memberRow[0]);
-                    // print_r($value);
-                    //$value=$memberRow;
-                    // $updateStudent="UPDATE TABLE `student` SET `guide_id`=";
                 }else{
                     echo"Member Account doesn't exist";
                 }
@@ -821,7 +873,7 @@
             //If student and group table is successfully updated
             $ProjectChecker="SELECT  `project_id` FROM `project` WHERE `group_id`='". $newGroupId ."'";
             $ProjectCheckerresult = mysqli_query($connection, $ProjectChecker);        
-            //Update in morning (INSERT and UPDATE to PROJECT)
+            //Update Project
             if(mysqli_num_rows($ProjectCheckerresult) > 0){
                 $row = mysqli_fetch_assoc($ProjectCheckerresult);
                 $projectUpdate="UPDATE TABLE `project` SET `project_name`='". $projectName ."', `project_desc`='". $projectDesc ."', `project_link`='". $projectLink ."', `technologies`='". $technologies ."' WHERE project_id='". $row['project_id'] ."'";
@@ -912,16 +964,5 @@
             echo "Error updating record:";
         } 
         
-
-        
-        /*
-        if(is_null($studentDetails["group_id"])){
-            
-            $groupId=
-            $insertGroup="INSERT INTO `group_details`(`group_id`, `group_member_count`, `group_member_ids`, `group_member_names`, `guide_id`, `project_id`) VALUES ()";    
-        }*/
-        
-        
-        // $studentQuery="UPDATE `student` SET ``"
     }
 ?>

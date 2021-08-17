@@ -28,10 +28,10 @@
 					</div>
 					<!-- Grid column -->
 				    <!-- Grid column -->
-				    <div class="col-md-6 mb-md-0 mb-3">
+				    <div class="col-md-6 col-12 mb-md-0 mb-3">
 				        <!-- Links -->
-				        <h5 class="text-uppercase text-right">Other Links</h5>
-				        <ul class="list-unstyled text-right">
+				        <h5 class="text-uppercase text-md-right text-denter">Other Links</h5>
+				        <ul class="list-unstyled text-md-right text-center">
 							<li>
 								<a href="https://www.vit.edu.in" target="_blank">College Website</a>
 							</li>
