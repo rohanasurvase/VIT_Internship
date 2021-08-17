@@ -86,6 +86,69 @@
         </div>
       </div>
     </div>
+	<div class="modal fade" id="deleteReportModal" tabindex="-1" role="dialog" aria-labelledby="editProjectLinkModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteReportModaltitle">Delete Report</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST">
+              <div class="modal-body">
+                 <h5>Are you sure?</h5>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" name="DeleteFile" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="deletePaperModal" tabindex="-1" role="dialog" aria-labelledby="editProjectLinkModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deletePaperModaltitle">Delete Research Paper</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST" action="">
+              <div class="modal-body">
+                 <h5>Are you sure?</h5>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" name="DeletePaper" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="deleteVideaModal" tabindex="-1" role="dialog" aria-labelledby="editProjectLinkModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteVideaModaltitle">Delete Videas Presentation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST" action="">
+              <div class="modal-body">
+                 <h5>Are you sure?</h5>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" name="DeleteVidea" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <?php
     // For Project Link Form
 	if (isset($_POST['updateLink'])) {
@@ -308,7 +371,7 @@
 								if($selectrow['student_id']===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(!is_null($row['blackbook_link'])){
-											echo'<button type="button" class="btn btn-danger">Delete</button>';
+											echo'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteReportModal">Delete</button>';
 										}
 									}
 								}
@@ -343,7 +406,7 @@
 								if($selectrow['student_id']===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(!is_null($row['paper_link'])){
-											echo'<button type="button" class="btn btn-danger">Delete</button>';
+											echo'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePaperModal">Delete</button>';
 										}
 									}
 								}
@@ -376,7 +439,7 @@
 								if($selectrow['student_id']===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(!is_null($row['videa_link'])){
-											echo'<button type="button" class="btn btn-danger">Delete</button>';
+											echo'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteVideaModal">Delete</button>';
 										}
 									}
 								}
@@ -528,7 +591,7 @@
 		$fileExt=explode('.', $fileName);
 		$fileActualExt=strtolower(end($fileExt));
 		//Allowed Extensions
-		$allowed=array('pdf','docx','doc','png','jpeg','jpg','odf','pptx','ppt');
+		$allowed=array('pdf');
 		//Check for extension
 		if(in_array($fileActualExt,$allowed)){
 			//If no error in file upload
@@ -536,10 +599,10 @@
 				// FileSize less than 15 MB
 				if($fileSize < 15000000){
 					//Creates unique ID based on the current microseconds
-					$fileNameNew = uniqid('',true).'.'.$fileActualExt;
+					$fileNameNew = 'report'.'.'.$fileActualExt;
 					$target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
 					move_uploaded_file($fileTemp, $target_dir);
-					$insertDocument="UPDATE `project` SET `blackbook_link`='". $target_dir ."'";
+					$insertDocument="UPDATE `project` SET `blackbook_link`='". $target_dir ."'WHERE `project_id`='".$projectID."'";
 					if (mysqli_query($connection, $insertDocument)) {
 					  echo "New record created successfully";
 					} else {
@@ -582,6 +645,27 @@
 	}
 
 
+?>
+<!-- Report Delete Code -->
+<?php 
+	if (isset($_POST['DeleteFile'])) {
+		$updateProject="UPDATE `project` SET `blackbook_link`=NULL WHERE `project_id`='". $projectID ."'";
+		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/research.pdf')){
+			$del=unlink('./Uploads/'.$_SESSION['user_id'].'/report.pdf');
+			if($del=="true"){
+				if (!mysqli_query($connection, $updateProject)) {
+					echo"Update Failed";
+				}
+			}else{
+				echo "Error in deleting file";
+			}
+		}else{
+			echo("File doesn't exist");
+		}
+
+		// mysqli_close($connection);
+
+	}
 ?>
 <!-- Research paper upload -->
 <?php
@@ -602,7 +686,7 @@
 		$fileExt=explode('.', $fileName);
 		$fileActualExt=strtolower(end($fileExt));
 		//Allowed Extensions
-		$allowed=array('pdf','docx','doc','png','jpeg','jpg','odf','pptx','ppt');
+		$allowed=array('pdf');
 		//Check for extension
 		if(in_array($fileActualExt,$allowed)){
 			//If no error in file upload
@@ -610,10 +694,10 @@
 				// FileSize less than 15 MB
 				if($fileSize < 15000000){
 					//Creates unique ID based on the current microseconds
-					$fileNameNew = uniqid('',true).'.'.$fileActualExt;
+					$fileNameNew = "research".'.'.$fileActualExt;
 					$target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
 					move_uploaded_file($fileTemp, $target_dir);
-					$insertDocument="UPDATE `project` SET `paper_link`='". $target_dir ."'";
+					$insertDocument="UPDATE `project` SET `paper_link`='". $target_dir ."' WHERE `project_id`='".$projectID."'";
 					if (mysqli_query($connection, $insertDocument)) {
 					  echo "New record created successfully";
 					} else {
@@ -657,6 +741,30 @@
 
 
 ?>
+<!-- Delete Paper Code -->
+<?php 
+	if (isset($_POST['DeletePaper'])) {
+
+		$updateProject="UPDATE `project` SET `paper_link`=NULL WHERE `project_id`='". $projectID ."'";
+		
+		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/research.pdf')){
+			$del=unlink('./Uploads/'.$_SESSION['user_id'].'/research.pdf');
+			if($del=="true"){
+				if (!mysqli_query($connection, $updateProject)) {
+					echo"Update Failed";
+				}
+			}else{
+				echo "Error in deleting file";
+			}	
+		}else{
+			echo "File doesn't exist";
+		}
+		
+
+		// mysqli_close($connection);
+
+	}
+?>
 <!-- Videas Upload -->
 <?php 
 	if(isset($_POST['videa-submit'])){
@@ -676,7 +784,7 @@
 		$fileExt=explode('.', $fileName);
 		$fileActualExt=strtolower(end($fileExt));
 		//Allowed Extensions
-		$allowed=array('pdf','docx','doc','png','jpeg','jpg','odf','pptx','ppt');
+		$allowed=array('pdf');
 		//Check for extension
 		if(in_array($fileActualExt,$allowed)){
 			//If no error in file upload
@@ -684,10 +792,10 @@
 				// FileSize less than 15 MB
 				if($fileSize < 15000000){
 					//Creates unique ID based on the current microseconds
-					$fileNameNew = uniqid('',true).'.'.$fileActualExt;
+					$fileNameNew = 'videa'.'.'.$fileActualExt;
 					$target_dir = "Uploads/".$_SESSION['user_id']."/".$fileNameNew;
 					move_uploaded_file($fileTemp, $target_dir);
-					$insertDocument="UPDATE `project` SET `videa_link`='". $target_dir ."'";
+					$insertDocument="UPDATE `project` SET `videa_link`='". $target_dir ."'WHERE `project_id`='".$projectID."'";
 					if (mysqli_query($connection, $insertDocument)) {
 					  echo "New record created successfully";
 					} else {
@@ -729,4 +837,23 @@
 		}
 	}
  ?>
+ <!-- Delete Videas Presenation -->
+ <?php 
+	if (isset($_POST['DeleteVidea'])) {
+		$updateProject="UPDATE `project` SET `videa_link`=NULL WHERE `project_id`='". $projectID ."'";
+		if(file_exists('./Uploads/'.$_SESSION['user_id'].'/research.pdf')){
+			$del=unlink('./Uploads/'.$_SESSION['user_id'].'/videa.pptx');
+			if($del=="true"){
+				if (!mysqli_query($connection, $updateProject)) {
+					echo"Update Failed";
+				}
+			}else{
+				echo "Error in deleting file";
+			}
+		}
+		else{
+			echo"File doesn't exist";
+		}
+	}
+?>
 

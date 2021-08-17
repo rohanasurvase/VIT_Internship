@@ -17,11 +17,6 @@
 
   ?>
   <div class="container my-4">
-  <!-- <div class="row">
-    <div class="col-sm-12 mb-3">
-      <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search for names..">
-    </div>
-  </div> -->
   <div class="row" id="myItems">
     <div class="col-sm-12 mb-3">
       
@@ -124,22 +119,13 @@
 <?php
   require('./PHP/footer.php');
 ?>
+<style>
+  .page-footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+</style>
 </body>
 </html>
-<script>
-/*function myFunction() {
-    var input, filter, cards, cardContainer, h5, title, i;
-    input = document.getElementById("myFilter");
-    filter = input.value.toUpperCase();
-    cardContainer = document.getElementById("myItems");
-    cards = cardContainer.getElementsByClassName("card");
-    for (i = 0; i < cards.length; i++) {
-        title = cards[i].querySelector(".card-body h5.card-title");
-        if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-            cards[i].style.display = "";
-        } else {
-            cards[i].style.display = "none";
-        }
-    }
-}*/
-</script>

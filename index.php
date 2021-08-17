@@ -24,7 +24,7 @@
                     <input type="search" class="form-control rounded search-box" id="search-input" placeholder="Search" />
                     <div class="input-group-append bg-white">
                         <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle search-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled="true">Search By</button>
+                            <button class="btn btn-outline-secondary dropdown-toggle search-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search By</button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <button class="dropdown-item" onclick="filterBy('project')">Project</button>
                                 <button class="dropdown-item" onclick="filterBy('student')">Student</button>
@@ -42,6 +42,6 @@
     <?php
         require('./PHP/footer.php');
     ?>
-    <script src="./JS/search_script.js"></script>
+    <!-- <script src="./JS/search_script.js"></script> -->
 </body>
 </html>
