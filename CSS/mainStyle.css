@@ -13,3 +13,6 @@ html,body{
 #error-text{
    color: red;
 }
+#formFooter{
+  text-align: center;
+}

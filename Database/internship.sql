@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 15, 2021 at 01:53 PM
+-- Generation Time: Aug 19, 2021 at 12:28 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -89,7 +89,7 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`pid`, `project_id`, `project_name`, `project_desc`, `blackbook_link`, `paper_link`, `videa_link`, `guideid`, `other_details`, `group_id`, `project_link`, `technologies`) VALUES
-(1, 'EtA1', 'BookBarn', 'Amazing project', NULL, NULL, NULL, 'g11', NULL, 'Gr2', NULL, 'HTML,CSS');
+(1, 'EtA1', 'BookBarn', 'Amazing project', 'Uploads/s12/report.pdf', NULL, NULL, 'g11', 'Won prize, Sponsored by ABC', 'Gr2', 'www.google.com', 'HTML,CSS');
 
 -- --------------------------------------------------------
 
@@ -111,7 +111,7 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`student_id`, `group_id`, `guide_id`, `batch`, `division`) VALUES
 ('s12', 'Gr2', 'g11', 2022, 1),
-('s14', 'Gr2', 'g11', 0, 1);
+('s14', 'Gr2', 'g11', 2021, 1);
 
 -- --------------------------------------------------------
 
@@ -124,7 +124,7 @@ CREATE TABLE `user_info` (
   `user_id` varchar(10) DEFAULT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `department` varchar(30) NOT NULL DEFAULT 'Enter your Department',
+  `department` varchar(30) DEFAULT NULL,
   `type` varchar(10) NOT NULL,
   `password` varchar(10) NOT NULL,
   `image` varchar(50) NOT NULL DEFAULT './Assets/default_profile.png'
@@ -135,9 +135,9 @@ CREATE TABLE `user_info` (
 --
 
 INSERT INTO `user_info` (`id`, `user_id`, `username`, `email`, `department`, `type`, `password`, `image`) VALUES
-(11, 'g11', 'Rohana Survase', 'rohana@gmail.com', 'Enter your Department', 'guide', 'rohana', './Assets/default_profile.png'),
-(12, 's12', 'Shardul Birje', 'shardulbirje@gmail.com', 'Enter your Department', 'student', 'shardul', './Assets/default_profile.png'),
-(14, 's14', 'John Doe', 'johndoe@gmail.com', 'Enter your Department', 'student', 'john', './Assets/default_profile.png');
+(11, 'g11', 'Rohana Survase', 'rohana@gmail.com', NULL, 'guide', 'rohana', './Assets/default_profile.png'),
+(12, 's12', 'Shardul Birje', 'shardulbirje@gmail.com', 'INFT', 'student', 'shardul', './Uploads/s12/profile.png'),
+(14, 's14', 'John Doe', 'johndoe@gmail.com', 'INFT', 'student', 'john', './Assets/default_profile.png');
 
 --
 -- Indexes for dumped tables

@@ -6,77 +6,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="SignUpStyle.css">
-
-
-	<title>Document</title>
+	<title>Create Account</title>
 </head>
 <body>
-  	<section class="container-fluid border border-success">
- 		 <div class="SignUp">
-    		<form class="form-container d-flex justify-content-center align-items-center" method="POST" >
-    			<div class="form-group">
-				    <h1 style="padding-bottom: 1em; text-align: center;">Sign Up</h1>
-					<label for="name-details"><b>Enter Name</b></label>
-                    <div class="input-group" id="name-details">
-                        
-                        <!-- declaration for first field -->
-                        <input type="text" id="firstname" class="form-control" placeholder="First Name" name="firstName" required/>
-                        <!-- declaration for second field -->
-                        <input type="text" class="form-control" placeholder="Last Name" name="lastName" required/>
-                    </div>
-                    <!-- <label for="firstname"><b>User name</b></label>
-				    <input type="text" placeholder="Enter username" class="Input-first mb-2 d-block" name="username"  required> -->
-                    <label for="account-type" class="d-block"><b>Select Type</b></label>
-                    <div class="form-check form-check-inline" id="account-type">
-                        <input class="form-check-input" type="radio" name="type" id="type1" value="student">
-                        <label class="form-check-label" for="type1">Student</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="type" id="type2" value="guide">
-                        <label class="form-check-label" for="type2">Guide</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="type" id="type3" value="admin">
-                        <label class="form-check-label" for="type3">Project Co-ordinator</label>
-                    </div>
+    <div class="h-100 d-flex align-items-center">
+      	<section class="container-fluid">
+     		<div class="SignUp">
+        		<h1 style="padding-bottom: 1em; text-align: center;">Sign Up</h1>
+                <form class="form-container d-flex justify-content-center align-items-center" method="POST" >
+        			<div class="form-group">
+    					<label for="name-details"><b>Enter Name</b></label>
+                        <div class="input-group" id="name-details">
+                            
+                            <!-- declaration for first field -->
+                            <input type="text" id="firstname" class="form-control" placeholder="First Name" name="firstName" required/>
+                            <!-- declaration for second field -->
+                            <input type="text" class="form-control" placeholder="Last Name" name="lastName" required/>
+                        </div>
+                        <!-- <label for="firstname"><b>User name</b></label>
+    				    <input type="text" placeholder="Enter username" class="Input-first mb-2 d-block" name="username"  required> -->
+                        <label for="account-type" class="d-block"><b>Select Type</b></label>
+                        <div class="form-check form-check-inline" id="account-type">
+                            <input class="form-check-input" type="radio" name="type" id="type1" value="student">
+                            <label class="form-check-label" for="type1">Student</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="type" id="type2" value="guide">
+                            <label class="form-check-label" for="type2">Guide</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="type" id="type3" value="admin">
+                            <label class="form-check-label" for="type3">Project Co-ordinator</label>
+                        </div>
 
-              <!-- <input class="form-check-input" type="radio" name="type" id="flexRadioDefault1" value="admin">
-              <label class="form-check-label" for="flexRadioDefault1">
-                
-              </label>
-
-              <input class="form-check-input" type="radio" name="type" id="flexRadioDefault2" value="student">
-              <label class="form-check-label" for="flexRadioDefault2">
-               Student
-              </label>
-
-              <input class="form-check-input" type="radio" name="type" id="flexRadioDefault3" value="guide">      
-                        <label class="form-check-label" for="flexRadioDefault3">  Guide </label>
-
-
- -->
 					    <label for="email" class="d-block"><b>Email</b></label>
 					    <input type="text" placeholder="Enter Email" class=" form-control Input-second mb-2 d-block" name="email" required>
 
 					    <label for="psw"><b>Password</b></label>
-					    <input type="password" placeholder="Enter Password" class=" form-control Input-third mb-2 d-block" id="psw" name="password" required>
-
-             
-
-					    <!-- <label for="psw-repeat"><b>Repeat Password</b></label> 
-					    <input type="password" placeholder="Repeat Password" class="Input-fourth mb-3 d-block" name="psw-repeat" required> -->
-					  
-   
-    <div class="FormFooter"> 
-    	<div class="text-center">
-      <button type="submit" class="signupbtn btn btn-primary" name="signup-submit">Sign Up</button>
+					    <input type="password" placeholder="Enter Password" class=" form-control Input-third mb-2 d-block" id="password" name="password" required>  
+                        <div class="form-check my-2">
+                            <input type="checkbox" class="form-check-input" id="showPassword" onclick="myFunction()">
+                            <label class="form-check-label" for="showPassword">Show Password</label>
+                        </div>       
+                        <!-- <div class="FormFooter">  -->
+                          <button type="submit" class="signupbtn btn btn-primary" name="signup-submit">Sign Up</button>
+                          
+                        <!-- </div> -->
+                    </div>
+                    
+                </form>
+                <div id="formFooter">
+                    <p><a href="./LoginPage.php">Already have an account?</a></p>
+                </div>
+            </div>
+        </section>
     </div>
-  </div>
-</form>
-	
+    <script type="text/javascript">
+        function myFunction() {
+            var pass = document.getElementById("password");
+            if (pass.type === "password") {
+                pass.type = "text";
+            } else {
+                pass.type = "password";
+            }
+        } 
+    </script>
 </body>
 </html>
 <?php
