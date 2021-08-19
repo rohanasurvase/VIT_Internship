@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 19, 2021 at 12:28 PM
+-- Generation Time: Aug 19, 2021 at 08:16 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -53,7 +53,7 @@ INSERT INTO `group_details` (`gid`, `group_id`, `group_member_count`, `group_mem
 CREATE TABLE `guide` (
   `guide_id` varchar(4) NOT NULL,
   `project_ids` varchar(50) DEFAULT NULL,
-  `guide_code` varchar(5) NOT NULL
+  `guide_code` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -61,7 +61,8 @@ CREATE TABLE `guide` (
 --
 
 INSERT INTO `guide` (`guide_id`, `project_ids`, `guide_code`) VALUES
-('g11', NULL, 'RS');
+('g11', NULL, 'RS'),
+('g20', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -89,7 +90,7 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`pid`, `project_id`, `project_name`, `project_desc`, `blackbook_link`, `paper_link`, `videa_link`, `guideid`, `other_details`, `group_id`, `project_link`, `technologies`) VALUES
-(1, 'EtA1', 'BookBarn', 'Amazing project', 'Uploads/s12/report.pdf', NULL, NULL, 'g11', 'Won prize, Sponsored by ABC', 'Gr2', 'www.google.com', 'HTML,CSS');
+(1, 'EtA1', 'BookBarn', 'BookBarn allows a user to buy new books, sell old books, rent used books all at the same place.', NULL, NULL, NULL, 'g11', 'Won prize, Sponsored by ABC', 'Gr2', 'www.google.com', 'HTML,CSS');
 
 -- --------------------------------------------------------
 
@@ -111,7 +112,8 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`student_id`, `group_id`, `guide_id`, `batch`, `division`) VALUES
 ('s12', 'Gr2', 'g11', 2022, 1),
-('s14', 'Gr2', 'g11', 2021, 1);
+('s14', 'Gr2', 'g11', 2021, 1),
+('s15', NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -137,7 +139,9 @@ CREATE TABLE `user_info` (
 INSERT INTO `user_info` (`id`, `user_id`, `username`, `email`, `department`, `type`, `password`, `image`) VALUES
 (11, 'g11', 'Rohana Survase', 'rohana@gmail.com', NULL, 'guide', 'rohana', './Assets/default_profile.png'),
 (12, 's12', 'Shardul Birje', 'shardulbirje@gmail.com', 'INFT', 'student', 'shardul', './Uploads/s12/profile.png'),
-(14, 's14', 'John Doe', 'johndoe@gmail.com', 'INFT', 'student', 'john', './Assets/default_profile.png');
+(14, 's14', 'John Doe', 'johndoe@gmail.com', 'INFT', 'student', 'john', './Assets/default_profile.png'),
+(15, 's15', 'Adam Levine', 'adamlevine@ymail.com', NULL, 'student', 'adam', './Assets/default_profile.png'),
+(21, 'a21', 'Ramesh Smith', 'ramesh@gmail.com', NULL, 'admin', 'ramesh', './Assets/default_profile.png');
 
 --
 -- Indexes for dumped tables
@@ -188,13 +192,13 @@ ALTER TABLE `group_details`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

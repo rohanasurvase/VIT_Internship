@@ -1,18 +1,17 @@
 <?php
   session_start();
   require('./PHP/common_files.php');
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Create Account</title>
+	<title>Create Guide/Admin Account</title>
 </head>
 <body>
     <div class="h-100 d-flex align-items-center">
       	<section class="container-fluid">
      		<div class="SignUp">
-        		<h1 style="padding-bottom: 1em; text-align: center;">Sign Up</h1>
+        		<h1 style="padding-bottom: 1em; text-align: center;">Guide/Admin Sign Up</h1>
                 <form class="form-container d-flex justify-content-center align-items-center" method="POST" >
         			<div class="form-group">
     					<label for="name-details"><b>Enter Name</b></label>
@@ -23,13 +22,11 @@
                             <!-- declaration for second field -->
                             <input type="text" class="form-control" placeholder="Last Name" name="lastName" required/>
                         </div>
-                        <!-- <label for="firstname"><b>User name</b></label>
-    				    <input type="text" placeholder="Enter username" class="Input-first mb-2 d-block" name="username"  required> -->
-                        <!-- <label for="account-type" class="d-block"><b>Select Type</b></label>
-                        <div class="form-check form-check-inline" id="account-type">
+                        <label for="account-type" class="d-block"><b>Select Type</b></label>
+                        <!-- <div class="form-check form-check-inline" id="account-type">
                             <input class="form-check-input" type="radio" name="type" id="type1" value="student">
                             <label class="form-check-label" for="type1">Student</label>
-                        </div>
+                        </div> -->
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="type" id="type2" value="guide">
                             <label class="form-check-label" for="type2">Guide</label>
@@ -37,7 +34,7 @@
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="type" id="type3" value="admin">
                             <label class="form-check-label" for="type3">Project Co-ordinator</label>
-                        </div> -->
+                        </div>
 
 					    <label for="email" class="d-block"><b>Email</b></label>
 					    <input type="text" placeholder="Enter Email" class=" form-control Input-second mb-2 d-block" name="email" required>
@@ -85,7 +82,7 @@
     $lastName=$_POST['lastName'];
     $user_name=$firstName.' '.$lastName;
     $email = $_POST['email'];
-    $type =  'student';
+    $type =  $_POST['type'];
     $password = $_POST['password'];
 
     $sql = "INSERT INTO user_info (email,password,type,username) VALUES('". $email ."','". $password ."','". $type ."','". $user_name ."')";
@@ -93,13 +90,15 @@
 
     if ((mysqli_query($connection, $sql))){
         // echo("Done");
-        $id=mysqli_insert_id($connection);
-        // echo($id);
-        if(!empty($type))
-        {
-            $newuserid = $type[0].strval($id);
-        }
-        // Update User_info table
+
+
+      $id=mysqli_insert_id($connection);
+      // echo($id);
+       if(!empty($type))
+       {
+        $newuserid = $type[0].strval($id);
+       }
+
         $query="UPDATE `user_info` set `user_id`='". $newuserid ."' where `id`='". $id ."'";
         $run_query=mysqli_query($connection,$query);
         if (!$run_query) 
@@ -108,17 +107,25 @@
         }
         else
         {
-            $insert="INSERT INTO student (student_id) VALUES ('". $newuserid ."')";
-            if(mysqli_query($connection, $insert)){
-                mkdir('./Uploads/'.$newuserid,0777,true);
+            if($type[0]=='g') {
+                //For guide
+                $insert="INSERT INTO guide (guide_id) VALUES ('". $newuserid ."')";
+                if(mysqli_query($connection, $insert)){
+                    $a=mkdir('./Uploads/'.$newuserid,0777,true);
+                    $_SESSION['user_id']=$newuserid;
+                    echo'<script>location.href="./account.php?userid='.$newuserid.'"</script>';
+                }else{
+                    echo(mysqli_error($connection));
+                }
+            }else{
+                // For admin
+                $a=mkdir('./Uploads/'.$newuserid,0777,true);
                 $_SESSION['user_id']=$newuserid;
                 echo'<script>location.href="./account.php?userid='.$newuserid.'"</script>';
-            }else{
-                echo(mysqli_error($connection));
             }
+            
             // echo "'your user name is and user id is '.$newuserid.'" ;
         }   
-
       // echo "New record created successfully";
     }else{
         echo(mysqli_error($connection));

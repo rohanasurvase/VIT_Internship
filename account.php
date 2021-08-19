@@ -467,31 +467,33 @@
                             ?>
                             <?php 
                                 if($userDetails['type']==="student"){
-                                    $GuideName="SELECT `username` FROM `user_info` where `user_id`='". $studentDetails['guide_id'] ."'";
-                                   $Guideresult = mysqli_query($connection, $GuideName);
-                                   $Guiderow='';
-                                   if (mysqli_num_rows($Guideresult) > 0) {
-                                        $Guiderow = mysqli_fetch_assoc($Guideresult);
+                                    if(!is_null($studentDetails['group_id'])){
+                                        $GuideName="SELECT `username` FROM `user_info` where `user_id`='". $studentDetails['guide_id'] ."'";
+                                        $Guideresult = mysqli_query($connection, $GuideName);
+                                        $Guiderow='';
+                                        if (mysqli_num_rows($Guideresult) > 0) {
+                                            $Guiderow = mysqli_fetch_assoc($Guideresult);
+                                        }
+                                        echo'
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                            '.$projectDetails["project_name"].'
+                                            </div>
+                                            <div class="card-body">
+                                               <h5 class="card-title">Guide Name: '.$Guiderow["username"].'</h5>
+                                                <p class="card-text">
+                                                    '.$projectDetails["project_desc"].'
+                                                </p>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Group Members: '.$groupDetails["group_member_names"].'</p>
+                                                <p>Technology used: '.$projectDetails["technologies"].'
+                                                </p>
+                                                <a href="./project.php?id='.$projectDetails["project_id"].'" class="btn btn-primary">View Project</a>
+                                            </div>
+                                        </div>
+                                        ';
                                     }
-                                    echo'
-                                    <div class="card mb-4">
-                                        <div class="card-header">
-                                        '.$projectDetails["project_name"].'
-                                        </div>
-                                        <div class="card-body">
-                                           <h5 class="card-title">Guide Name: '.$Guiderow["username"].'</h5>
-                                            <p class="card-text">
-                                                '.$projectDetails["project_desc"].'
-                                            </p>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>Group Members: '.$groupDetails["group_member_names"].'</p>
-                                            <p>Technology used: '.$projectDetails["technologies"].'
-                                            </p>
-                                            <a href="./project.php?id='.$projectDetails["project_id"].'" class="btn btn-primary">View Project</a>
-                                        </div>
-                                    </div>
-                           ';
                                 }else{
                                    $selectProjectResult=mysqli_query($connection, $selectProjectDetails);    
                                     // $SelectGroupMembers="SELECT `group_member_names` FROM `group_details` WHERE `guide_id`='"$userID"'";
@@ -522,9 +524,6 @@
                                     }
 
                                 }
-
-
-
                              ?>
                         </div>         
                    </div>
@@ -743,13 +742,24 @@ if (isset($_POST["profile-submit"])) {
             if($count==1){
                 //Selects ID of member based on email
                 $memberCheck="SELECT `user_id` FROM `user_info` WHERE `email`='". $member1 ."'";
+
                 $memberResult = mysqli_query($connection, $memberCheck);
                 if(mysqli_num_rows($memberResult) > 0){
-                     $memberRow = mysqli_fetch_array($memberResult, MYSQLI_NUM);
+                    $memberRow = mysqli_fetch_array($memberResult, MYSQLI_NUM);
+                    $memberVerify="SELECT `group_id` FROM `student` WHERE `student_id`='". $memberRow[0] ."'";
+                    $memberVerifyResult = mysqli_query($connection, $memberVerify);
+                    //Check if the member is already part of a group
+                    if(mysqli_num_rows($memberVerifyResult) > 0){
+                        echo "Member is already part of another group.";
+                    }else{
+                        //Push the member id to Array     
+                        array_push($value,$memberRow[0]);
+                    }
                     //$memberRow = mysqli_fetch_assoc($memberResult);
-                    array_push($value,$memberRow[0]);
+                    
                 }else{
                     echo"Member Account doesn't exist";
+                    goto breaker;
                 }
             }
             // Two members
@@ -769,16 +779,38 @@ if (isset($_POST["profile-submit"])) {
                     //$memberRow1 = mysqli_fetch_assoc($memberResult1);
                     // $updateStudent="UPDATE TABLE `student` SET `guide_id`=";
                 }else if (mysqli_num_rows($memberResult1)==2) {
+
                     //$memberRow1 = mysqli_fetch_assoc($memberResult1);
+                    //if both members exist push ids into array
                     $memberRow1 = mysqli_fetch_array($memberResult1, MYSQLI_NUM);
-                    for ($i=0; $i<2; $i++) { 
-                        array_push($value,$memberRow1[$i]);
+                    $flag=0;
+                    for ($i=0; $i<2; $i++) {
+                        $memberVerify1="SELECT `group_id` FROM `student` WHERE `student_id`='". $memberRow1[0] ."'";
+                        $memberVerifyResult1 = mysqli_query($connection, $memberVerify1);    
+                        if(mysqli_num_rows($memberVerifyResult1) > 0){
+                            $flag++;
+                        }
                     }
+                    //Both members belong to a group
+                    if($flag==2){
+                        echo($member1.' and '.$member2.' both already belong to a group');
+                        goto breaker;
+                    }else if ($flag==1) {
+                        //One member belongs to another group
+                        echo("One of the member's already belongs to a group" );
+                        goto breaker;
+                    }else{
+                        for ($i=0; $i<2; $i++) {
+                            array_push($value,$memberRow1[$i]);
+                        }
+                    }
+                    
                     print_r($value);
                     //$value=;
                 }
                 else{
                     echo"Member Account doesn't exist";
+                    goto breaker;
                 }
             }
             
@@ -787,6 +819,7 @@ if (isset($_POST["profile-submit"])) {
         else{
             echo"Guide Account Doesn't Exist";  
         }
+        //push loggedin user's ID
         array_push($value,$userID);
         // print_r(count($value));
         // print_r($value);
@@ -801,6 +834,7 @@ if (isset($_POST["profile-submit"])) {
         $selectRow='';
         $updateStudent='';
         $group_member_names='';
+        //Check if 2 ids exist inside array(logged in user and group member)
         if(count($value)==2){
             //group member Ids
             $group_member_ids=$value[0].','.$value[1];
@@ -810,9 +844,12 @@ if (isset($_POST["profile-submit"])) {
             $selectResult=mysqli_query($connection, $select_usernames);
             if (mysqli_num_rows($selectResult) > 0) {
                 while($selectRow = mysqli_fetch_array($selectResult,MYSQLI_NUM)){
+                    //Group Member Names
                     $group_member_names=$group_member_names.$selectRow[0].'  ';    
                 }
+                //Remove Extra space at end (Added purposefully in previous line)
                 $group_member_names=trim($group_member_names);
+                //replace central space with comma(user-a,user-b)
                 $group_member_names=str_replace('  ', ',', $group_member_names);
                 //print_r($group_member_names);
 
@@ -999,4 +1036,5 @@ if (isset($_POST["profile-submit"])) {
         } 
         
     }
+    breaker:echo('');
 ?>
