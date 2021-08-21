@@ -12,6 +12,21 @@
     <?php
         require('./PHP/header.php');
     ?>
+
+    <?php 
+        if (isset($_GET['action'])) {
+            echo'<script>
+            location.reload();
+            location.href="./account.php?userid='.$_GET['id'].'"
+            </script>';
+        }else if (isset($_GET['result'])) {
+            echo'<script>
+            location.reload();
+            location.href="./project.php?id='.$_GET['project_id'].'"
+            </script>';
+        }
+
+    ?>
     <div class="jumbotron m-0">
         <div class="container">
             <h1 class="text-center">V-Projects</h1>

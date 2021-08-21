@@ -165,6 +165,9 @@
 				    </button>
 				  </div>
 				';
+				echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 			}else{
 				echo'
 				Error:
@@ -190,6 +193,9 @@
 				    </button>
 				  </div>
 				';
+				echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 			}else{
 				echo'
 				Error:
@@ -614,6 +620,9 @@
 					document.getElementById('success-text').innerText='The File was successfully uploaded!';
 					$('#success-modal').modal()</script>
 					";
+					echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 					
 				}
 				/*If File size exceeds 15 mb*/
@@ -655,6 +664,10 @@
 			if($del=="true"){
 				if (!mysqli_query($connection, $updateProject)) {
 					echo"Update Failed";
+				}else{
+					echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 				}
 			}else{
 				echo "Error in deleting file";
@@ -709,6 +722,9 @@
 					document.getElementById('success-text').innerText='The File was successfully uploaded!';
 					$('#success-modal').modal()</script>
 					";
+					echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 					
 				}
 				/*If File size exceeds 15 mb*/
@@ -752,6 +768,10 @@
 			if($del=="true"){
 				if (!mysqli_query($connection, $updateProject)) {
 					echo"Update Failed";
+				}else{
+					echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 				}
 			}else{
 				echo "Error in deleting file";
@@ -807,7 +827,9 @@
 					document.getElementById('success-text').innerText='The File was successfully uploaded!';
 					$('#success-modal').modal()</script>
 					";
-					
+					echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 				}
 				/*If File size exceeds 15 mb*/
 				else{
@@ -846,6 +868,10 @@
 			if($del=="true"){
 				if (!mysqli_query($connection, $updateProject)) {
 					echo"Update Failed";
+				}else{
+					echo'<script type="text/javascript">
+              location.href="./index.php?result=success&project_id='.$projectID.'";
+              </script>';
 				}
 			}else{
 				echo "Error in deleting file";

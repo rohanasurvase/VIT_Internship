@@ -20,7 +20,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="./all_users.php?type=guide">Guides</a>
                   <a class="dropdown-item" href="./all_users.php?type=student">Students</a>
-                  <a class="dropdown-item" href="./all_users.php?type=project co-ordinator">Project Co-ordinators</a>
+                  <a class="dropdown-item" href="./all_users.php?type=project_co-ordinator">Project Co-ordinators</a>
                 </div>
               </li>
               <!--<li class="nav-item about-option">

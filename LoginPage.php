@@ -85,12 +85,12 @@
                     echo "Wrong password";
                 }
             }else{
-                echo "No Such Account";
+                echo "Account doesn't exist!";
             }
         }
         else
         {
-            echo "wrong username or password!";
+            echo "Wrong username or password!";
         }
     }else{
         // echo"button issue";

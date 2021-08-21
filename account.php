@@ -9,7 +9,7 @@
         require('./PHP/common_files.php');
         require('./PHP/connect.php');
         if(isset($_GET['userid'])){
-            $userID=$_GET['userid'];
+            $userID=$_GET['userid'];    
         }
     ?> 
 	<title>Account</title>
@@ -62,10 +62,10 @@
     }else{
         // For Guide
         //$selectProjectDetails="SELECT `project_id`,`project_name`,`project_desc`,`technologies` FROM `project` WHERE `guideid`='". $userID ."'";
-        $selectProjectDetails="SELECT `project_name`,`project_desc`,`technologies`,`group_member_names`,`project`.`project_id` 
-        FROM `project` 
-        INNER JOIN `group_details` ON `guideid`=`guide_id`
+        $selectGuideProjectDetails="SELECT `project_name`,`project_desc`,`technologies`,`project_id` 
+        FROM `project`
         WHERE `guideid`='".$userID."'";
+
         
     }
     ?>
@@ -223,7 +223,7 @@
                         if(isset($projectDetails['project_link'])){
                             echo $projectDetails['project_link'];
                         }else{
-                            echo('Enter Link');
+                            echo('');
                         }?>">
                 </div>
                 <div class="form-group">
@@ -375,7 +375,7 @@
                                 <?php
                                     if($userDetails["type"]==="student"){
                                         if($studentDetails["batch"]==0){
-                                            echo "<p>Enter Batch</p>";
+                                            echo "";
                                         }else{
                                             echo "<p>Batch of ".$studentDetails['batch']."</p>";
                                         }
@@ -495,13 +495,13 @@
                                         ';
                                     }
                                 }else{
-                                   $selectProjectResult=mysqli_query($connection, $selectProjectDetails);    
+                                   $selectProjectResult=mysqli_query($connection, $selectGuideProjectDetails);    
                                     // $SelectGroupMembers="SELECT `group_member_names` FROM `group_details` WHERE `guide_id`='"$userID"'";
                                     // $selectGroupResult=mysqli_query($connection, $selectGroupMembers);
                                     if (mysqli_num_rows($selectProjectResult) > 0) {
 
                                         while($projectDetails=mysqli_fetch_assoc($selectProjectResult)){
-
+                                            // <!--<p>Group Members: '.$projectDetails["group_member_names"].'</p>-->
                                             echo'
                                             <div class="card mb-4">
                                                 <div class="card-header">
@@ -514,7 +514,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="card-body">
-                                                    <p>Group Members: '.$projectDetails["group_member_names"].'</p>
+                                                    
                                                     <p>Technology used: '.$projectDetails["technologies"].'
                                                     </p>
                                                     <a href="./project.php?id='.$projectDetails["project_id"].'" class="btn btn-primary">View Project</a>
@@ -644,6 +644,10 @@ if (isset($_POST["profile-submit"])) {
                     document.getElementById('success-text').innerText='The File was successfully uploaded!';
                     $('#success-modal').modal()</script>
                     ";
+                    echo '
+                    <script type="text/javascript">
+                    location.href="./index.php?action=success&id='.$userID.'";
+                    </script>';
                 } else {
                   echo "Error in updating file record";
                 }               
@@ -692,7 +696,7 @@ if (isset($_POST["profile-submit"])) {
         $year='';
         $query="UPDATE `user_info` SET `username`='". $name ."', `department`='". $dept ."' WHERE `user_id`='". $userID ."'";
         if (mysqli_query($connection, $query)) {
-          echo "Record updated successfully";
+          // echo "Record updated successfully";
         } else {
           echo "Error updating record: " . mysqli_error($connection);
         }
@@ -702,18 +706,36 @@ if (isset($_POST["profile-submit"])) {
             $studentQuery="UPDATE `student` SET `batch`='". $year ."', `division`='". $division_info ."' WHERE `student_id`='". $userID ."'";
             if (!mysqli_query($connection, $studentQuery)) {
                 echo "Error updating record: " . mysqli_error($connection);  
+            }else{
+                echo '
+                <script type="text/javascript">
+                location.href="./index.php?action=success&id='.$userID.'";
+                </script>';
             }
-        }else{
+        }else if($userDetails["type"]==="guide"){
             $guideCode=$_POST['guide-code'];
             $guideQuery="UPDATE `guide` SET `guide_code`='".$guideCode."'";
+            
             if (!mysqli_query($connection, $studentQuery)) {
                 echo "Error updating record: " . mysqli_error($connection);  
+            }else{
+                echo '
+                <script type="text/javascript">
+                location.href="./index.php?action=success&id='.$userID.'";
+                </script>';
             }
+        }else{
+            echo '
+                <script type="text/javascript">
+                location.href="./index.php?action=success&id='.$userID.'";
+                </script>';
         }
         // $studentQuery="UPDATE `student` SET ``"
+        
     }else{
         // echo "Button Error";
     }
+
 ?>
 <!-- Project -->
 <?php 
@@ -759,7 +781,6 @@ if (isset($_POST["profile-submit"])) {
                     
                 }else{
                     echo"Member Account doesn't exist";
-                    goto breaker;
                 }
             }
             // Two members
@@ -784,24 +805,30 @@ if (isset($_POST["profile-submit"])) {
                     //if both members exist push ids into array
                     $memberRow1 = mysqli_fetch_array($memberResult1, MYSQLI_NUM);
                     $flag=0;
+                    $arr=[];
                     for ($i=0; $i<2; $i++) {
                         $memberVerify1="SELECT `group_id` FROM `student` WHERE `student_id`='". $memberRow1[0] ."'";
                         $memberVerifyResult1 = mysqli_query($connection, $memberVerify1);    
                         if(mysqli_num_rows($memberVerifyResult1) > 0){
-                            $flag++;
+                            $memberValues=mysqli_fetch_assoc($memberVerifyResult1);
+                            if(!is_null($memberValues['group_id'])){
+                                $flag++;    
+                            }else{
+                                array_push($arr,$memberRow1[0]);
+                            } 
                         }
                     }
                     //Both members belong to a group
                     if($flag==2){
                         echo($member1.' and '.$member2.' both already belong to a group');
-                        goto breaker;
+                        // goto breaker;
                     }else if ($flag==1) {
                         //One member belongs to another group
                         echo("One of the member's already belongs to a group" );
-                        goto breaker;
+                        // goto breaker;
                     }else{
                         for ($i=0; $i<2; $i++) {
-                            array_push($value,$memberRow1[$i]);
+                            array_push($value,$arr[$i]);
                         }
                     }
                     
@@ -810,7 +837,7 @@ if (isset($_POST["profile-submit"])) {
                 }
                 else{
                     echo"Member Account doesn't exist";
-                    goto breaker;
+                    // goto breaker;
                 }
             }
             
@@ -871,7 +898,7 @@ if (isset($_POST["profile-submit"])) {
                 if (mysqli_query($connection, $insertGroup)) {
                     $groupId=mysqli_insert_id($connection);
                     $newGroupId="Gr".$groupId;
-                    $updateGroup="UPDATE `group_details` SET `group_id`='". $newGroupId ."'";    
+                    $updateGroup="UPDATE `group_details` SET `group_id`='". $newGroupId ."' WHERE `gid`='".$groupId."'";    
                     if(mysqli_query($connection, $updateGroup)){
                         $updateStudent="UPDATE `student` SET `group_id`='". $newGroupId ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN ('". $value[0] ."','". $value[1] ."')";
                     }else{
@@ -910,7 +937,7 @@ if (isset($_POST["profile-submit"])) {
                    if (mysqli_query($connection, $insertGroup)) {
                         $groupId=mysqli_insert_id($connection);
                         $newGroupId="Gr".$groupId;
-                        $updateGroup="UPDATE `group_details` SET `group_id`='". $newGroupId ."'";
+                        $updateGroup="UPDATE `group_details` SET `group_id`='". $newGroupId ."'WHERE `gid`='".$groupId."'";
                         if(mysqli_query($connection, $updateGroup)){
                             $updateStudent="UPDATE `student` SET `group_id`='". $newGroupId ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN('". $value[0] ."','". $value[1] ."','". $value[2] ."')";
                         }
@@ -926,7 +953,7 @@ if (isset($_POST["profile-submit"])) {
             }
         }
         if($updateStudent!=''){
-            if (!mysqli_query($connection, $updateStudent)) {
+            if (mysqli_query($connection, $updateStudent)) {
                 //If student and group table is successfully updated
                 /*$ProjectChecker="SELECT  `project_id` FROM `project` WHERE `group_id`='". $newGroupId ."'";
                 $ProjectCheckerresult = mysqli_query($connection, $ProjectChecker);        
@@ -968,6 +995,10 @@ if (isset($_POST["profile-submit"])) {
                                 $updateGroup="UPDATE `group_details` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
                                 if(mysqli_query($connection, $updateGroup)){
                                     echo"Success";
+                                    echo '
+                                    <script type="text/javascript">
+                                    location.href="./index.php?action=success&id='.$userID.'";
+                                    </script>';
                                 }else{
                                     echo"Error in updating group";
                                 }
@@ -997,13 +1028,17 @@ if (isset($_POST["profile-submit"])) {
                             //ITA1
                             //CPA1
                             //ETA1
-                            $newProjectId=$deptName[0].$deptName[2].$divisionChar.$projectId;
+                            $newProjectId=$deptName[0].$deptName[3].$divisionChar.$projectId;
                             //Update Project Id in Project table and group table
                             $updateProject="UPDATE `project` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
                             if (mysqli_query($connection, $updateProject)) {
                                 $updateGroup="UPDATE `group_details` SET `project_id`='". $newProjectId ."' WHERE `group_id`='". $newGroupId ."'";
                                 if(mysqli_query($connection, $updateGroup)){
                                     echo"Success";
+                                    echo '
+                                        <script type="text/javascript">
+                                        location.href="./index.php?action=success&id='.$userID.'";
+                                        </script>';
                                 }else{
                                     echo"Error in updating group";
                                 }
@@ -1028,7 +1063,10 @@ if (isset($_POST["profile-submit"])) {
                 $row = mysqli_fetch_assoc($ProjectCheckerresult);
                 $projectUpdate="UPDATE `project` SET `project_name`='". $projectName ."', `project_desc`='". $projectDesc ."', `project_link`='". $projectLink ."', `technologies`='". $technologies ."' WHERE project_id='". $row['project_id'] ."'";
                 if (mysqli_query($connection, $projectUpdate)) {
-                  // echo "Updated successfully";
+                  echo '
+                      <script type="text/javascript">
+                      location.href="./index.php?action=success&id='.$userID.'";
+                      </script>';
                 } else {
                   echo "Error: " . $projectUpdate . "<br>" . mysqli_error($connection);
                 }
@@ -1036,5 +1074,4 @@ if (isset($_POST["profile-submit"])) {
         } 
         
     }
-    breaker:echo('');
 ?>
