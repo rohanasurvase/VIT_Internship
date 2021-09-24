@@ -24,7 +24,7 @@
 		include('./PHP/connect.php');
 		$row='';
 		$grouprow='';
-		
+		$student_id='';
 		$sql = "SELECT * FROM `project` where `project_id`='". $projectID ."'";
 		$groupDetails="SELECT `group_member_names`,`project_id` FROM `group_details` WHERE `project_id`='". $projectID ."'";
 
@@ -56,7 +56,11 @@
 		$selectresult = mysqli_query($connection, $selectUser);
 	 	$selectrow='';
 	 	if (mysqli_num_rows($selectresult) > 0) {
-	 	  $selectrow = mysqli_fetch_assoc($selectresult);
+	 	  while($selectrow = mysqli_fetch_assoc($selectresult)){
+	 	  	if($selectrow['student_id']===$_SESSION['user_id']){
+	 	  		$student_id=$selectrow['student_id'];
+	 	  	}
+	 	  }
 		}	
 	 ?>
 	<!-- Project Link Modal -->
@@ -292,14 +296,20 @@
 					<!-- Display if user has given a link-->
 					<!-- If project is hosted or stored on Github -->
 					<?php
-						if($selectrow['student_id']===$_SESSION['user_id']){
+
+						if($student_id===$_SESSION['user_id']){
 							if($grouprow['project_id']==$projectID){
-								if (is_null($row['project_link'])) {
+
+								if (is_null($row['project_link'])||$row['project_link']=='') {
 									echo'<button class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#projectLinkModal">Add Project Link</button>';
 								}else{
 									echo('<a class="btn btn-primary btn-lg" href="//'.$row['project_link'].'" role="button">View Project</a>');
 								}
+							}else{
+								// echo "<script>alert('Yo')</script>";
 							}
+						}else{
+							// echo "<script>alert('NO')</script>";
 						}
 					?>
 					
@@ -359,7 +369,7 @@
 						<td>
 							<!-- Display to Uploader-->
 							<?php 
-								if($selectrow['student_id']===$_SESSION['user_id']){
+								if($student_id===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(is_null($row['blackbook_link'])){
 											echo'<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reportModal">Upload</button>';
@@ -374,7 +384,7 @@
 							 ?>
 							
 							<?php 
-								if($selectrow['student_id']===$_SESSION['user_id']){
+								if($student_id===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(!is_null($row['blackbook_link'])){
 											echo'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteReportModal">Delete</button>';
@@ -394,7 +404,7 @@
 						<td>121.5 kb</td> -->
 						<td>
 							<?php 
-								if($selectrow['student_id']===$_SESSION['user_id']){
+								if($student_id===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(is_null($row['paper_link'])){
 											echo'<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paperModal">Upload</button>';
@@ -409,7 +419,7 @@
 							 ?>
 							
 							<?php 
-								if($selectrow['student_id']===$_SESSION['user_id']){
+								if($student_id===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(!is_null($row['paper_link'])){
 											echo'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deletePaperModal">Delete</button>';
@@ -427,7 +437,7 @@
 						<td>121.5 kb</td> -->
 						<td>
 							<?php 
-								if($selectrow['student_id']===$_SESSION['user_id']){
+								if($student_id===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(is_null($row['videa_link'])){
 											echo'<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videaModal">Upload</button>';
@@ -442,7 +452,7 @@
 							 ?>
 							
 							<?php 
-								if($selectrow['student_id']===$_SESSION['user_id']){
+								if($student_id===$_SESSION['user_id']){
 									if($grouprow['project_id']==$projectID){
 										if(!is_null($row['videa_link'])){
 											echo'<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteVideaModal">Delete</button>';
@@ -547,7 +557,7 @@
 			<div class="d-flex justify-content-between align-items-center py-4">
 				<h2>Other Details</h2>
 				<?php 
-					if($selectrow['student_id']===$_SESSION['user_id']){
+					if($student_id===$_SESSION['user_id']){
 						if($grouprow['project_id']==$projectID){
 						echo '<button class="btn btn-secondary" data-toggle="modal" data-target="#detailModal">Add Other Details</button>';
 						}

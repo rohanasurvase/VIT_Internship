@@ -764,7 +764,7 @@ if (isset($_POST["profile-submit"])) {
             if($count==1){
                 //Selects ID of member based on email
                 $memberCheck="SELECT `user_id` FROM `user_info` WHERE `email`='". $member1 ."'";
-
+                // ..
                 $memberResult = mysqli_query($connection, $memberCheck);
                 if(mysqli_num_rows($memberResult) > 0){
                     $memberRow = mysqli_fetch_array($memberResult, MYSQLI_NUM);
@@ -772,10 +772,13 @@ if (isset($_POST["profile-submit"])) {
                     $memberVerifyResult = mysqli_query($connection, $memberVerify);
                     //Check if the member is already part of a group
                     if(mysqli_num_rows($memberVerifyResult) > 0){
-                        echo "Member is already part of another group.";
-                    }else{
-                        //Push the member id to Array     
-                        array_push($value,$memberRow[0]);
+                        $memberVerifyRow = mysqli_fetch_array($memberVerifyResult, MYSQLI_NUM);
+                        if(is_null($memberVerifyRow[0])){
+                            array_push($value,$memberRow[0]);    
+                        }else{
+                            echo "Member is already part of another group.";    
+                        }
+                        
                     }
                     //$memberRow = mysqli_fetch_assoc($memberResult);
                     

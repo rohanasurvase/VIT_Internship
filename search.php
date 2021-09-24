@@ -16,7 +16,7 @@
   require('./PHP/header.php');
 
   ?>
-  <div class="container my-4">
+  <div class="search-results container my-4">
   <div class="row" id="myItems">
     <div class="col-sm-12 mb-3">
       
@@ -126,6 +126,10 @@
     left: 0;
     width: 100%;
   }
+  .search-results{
+      padding-bottom: 12em;
+  }
+  
 </style>
 </body>
 </html>
