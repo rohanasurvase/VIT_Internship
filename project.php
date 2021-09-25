@@ -1,6 +1,9 @@
 <?php
 	$projectID="";
 	session_start();
+	if(!isset($_SESSION['user_id'])){
+	    echo "<script> location.href='./LoginPage.php'; </script>";
+	}
 	require('./PHP/common_files.php');
 	if(isset($_GET['id'])){
 	    $projectID=$_GET['id'];

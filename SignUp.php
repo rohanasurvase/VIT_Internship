@@ -9,7 +9,10 @@
 	<title>Create Account</title>
 </head>
 <body>
-    <div class="h-100 d-flex align-items-center">
+    <?php 
+        require('./PHP/header.php');
+     ?>
+    <div class="mt-5 d-flex align-items-center">
       	<section class="container-fluid">
      		<div class="SignUp">
         		<h1 style="padding-bottom: 1em; text-align: center;">Sign Up</h1>

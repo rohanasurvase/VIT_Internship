@@ -57,7 +57,7 @@
     width: 100%;
   }
   .projects{
-      margin-bottom: 15em;
+      padding-bottom: 15em;
   }
 </style>
 </body>

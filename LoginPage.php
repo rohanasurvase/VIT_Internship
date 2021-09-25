@@ -22,7 +22,10 @@
         }
         include("./PHP/connect.php");
     ?>
-    <div class="h-100 d-flex align-items-center">
+     <?php 
+        require('./PHP/header.php');
+     ?>
+    <div class="mt-5 d-flex align-items-center">
         <section class="container w-md-25">
             <!-- <div class="Login"> -->
                 <h1 class="pb-2 text-center">LogIn</h1>
@@ -79,7 +82,7 @@
                 {
                     $_SESSION['user_id'] = $user_data['user_id'];
 
-                    header("Location: account.php?userid=".$user_data['user_id']);
+                    echo"<script>location.href='account.php?userid=". $user_data['user_id'] ."';</script>";
                 //   die;
                 }else{
                     echo "Wrong password";
