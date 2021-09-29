@@ -14,7 +14,7 @@
 
   ?>
 
-  <div class="container my-4">
+  <div class="projects container my-4">
   <div class="row" id="myItems">
     <div class="col-sm-12 mb-3">
       <?php
@@ -49,5 +49,16 @@
 <?php
   require('./PHP/footer.php');
 ?>
+<style>
+  .page-footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+  .projects{
+      padding-bottom: 15em;
+  }
+</style>
 </body>
 </html>

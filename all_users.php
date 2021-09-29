@@ -15,9 +15,12 @@
 	<?php
         require('./PHP/header.php')
     ?>
-    <div class="container mx-auto">
+    <div class="users container mx-auto">
         <?php
-            $selectUser="SELECT user_id,image,username,type FROM `user_info` where `type`='". $_GET['type'] ."'";
+            if($type_detail==='project_co-ordinator'){
+                $type_detail='admin';
+            }
+            $selectUser="SELECT user_id,image,username,type FROM `user_info` where `type`='". $type_detail ."'";
             $result = mysqli_query($connection, $selectUser);
 
             if (mysqli_num_rows($result) > 0) {
@@ -25,10 +28,10 @@
                 while($row = mysqli_fetch_assoc($result)) {
                     echo'
                     <div class="row py-2 border-bottom border-default">
-                        <div class="col-2 d-flex justify-content-end">
+                        <div class="col-md-2 col-4 d-flex justify-content-end">
                             <img src="'.$row["image"].'" alt="Image" style=" max-height:6.2em;">
                         </div>
-                        <div class="col-8">
+                        <div class="col-md-8 col-6">
                             <div class="card border-0">
                               <!-- <h5 class="card-header">User Name</h5> <--></-->
                               <div class="card-body">
@@ -58,7 +61,15 @@
     		bottom: 0;
     		left: 0;
     		width: 100%;
-    	}
+        }
+        .users{
+            margin-bottom: 25em;
+        }
+        @media only screen and (min-width: 768px) {
+            .users{
+                margin-bottom: 15em;
+            }    
+        }
     </style>
 </body>
 </html>
