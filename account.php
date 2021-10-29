@@ -15,6 +15,22 @@
 	<title>Account</title>
 </head>
 <body>
+    <!-- Error Modal -->
+    <div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content bg-danger text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">Error!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id='modal-error-text'></p>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Check if account id==loggedin user id => if true display pencils else no -->
     <?php
         if(!isset($_SESSION['user_id'])){
@@ -657,7 +673,7 @@ if (isset($_POST["profile-submit"])) {
             else{
                 echo'
                 <script>
-                    document.getElementById("error-text").innerText="Your File is too big: '.$fileSize.' kbs";
+                    document.getElementById("modal-error-text").innerText="Your File is too big: '.$fileSize.' kbs";
                     $("#error-modal").modal()
                 </script>
                 ';
@@ -665,7 +681,7 @@ if (isset($_POST["profile-submit"])) {
         }else{
             echo'
                 <script>
-                    document.getElementById("error-text").innerText="Error in uploading file.";
+                    document.getElementById("modal-error-text").innerText="Error in uploading file.";
                     $("#error-modal").modal()
                 </script>
                 ';
@@ -674,7 +690,7 @@ if (isset($_POST["profile-submit"])) {
     }else{
         echo'
             <script>
-                document.getElementById("error-text").innerText="Invalid File Type.";
+                document.getElementById("modal-error-text").innerText="Invalid File Type.";
                 $("#error-modal").modal()
             </script>
         ';
@@ -749,7 +765,7 @@ if (isset($_POST["profile-submit"])) {
             $technologies=explode($technologies,',');
         }*/
         $count=(int)$_POST['member-count'];
-        echo($count);
+        // echo($count);
         $member2='';
         $memberCheck='';
         $member1=$_POST['member-1'];
@@ -822,7 +838,7 @@ if (isset($_POST["profile-submit"])) {
                             } 
                         }
                     }
-                    print_r($arr);
+                    // print_r($arr);
                     //Both members belong to a group
                     if($flag==2){
                         echo($member1.' and '.$member2.' both already belong to a group');
@@ -837,7 +853,7 @@ if (isset($_POST["profile-submit"])) {
                         }
                     }
                     
-                    print_r($value);
+                    // print_r($value);
                     //$value=;
                 }
                 else{
@@ -849,7 +865,10 @@ if (isset($_POST["profile-submit"])) {
         }
         // Guide account doesn't exist
         else{
-            echo"Guide Account Doesn't Exist";  
+            echo'<script>
+                    document.getElementById("modal-error-text").innerText="Guide Account doesn\'t exist";
+                    $("#error-modal").modal()
+                </script>';  
         }
         //push loggedin user's ID
         array_push($value,$userID);
@@ -893,7 +912,10 @@ if (isset($_POST["profile-submit"])) {
             // Insert or Update Group table
             if(mysqli_num_rows($GroupCheckerresult)>0){
                 //$count=$count+1;
-                echo"Cannot Update Group Details";
+                echo'<script>
+                    document.getElementById("modal-error-text").innerText="Cannot Update Group Details";
+                    $("#error-modal").modal()
+                </script>';
                 //$insertGroup="UPDATE `group_details` SET  `group_member_count`='". $count."', `guide_id`'". $guideRow['guide_id']."' WHERE `group_member_ids`='".$group_member_ids."'";
 
             }else{
@@ -907,12 +929,18 @@ if (isset($_POST["profile-submit"])) {
                     if(mysqli_query($connection, $updateGroup)){
                         $updateStudent="UPDATE `student` SET `group_id`='". $newGroupId ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN ('". $value[0] ."','". $value[1] ."')";
                     }else{
-                        echo"Error in updating group dets";
+                       echo'<script>
+                               document.getElementById("modal-error-text").innerText="Error while updating group records";
+                               $("#error-modal").modal()
+                           </script>'; 
                     }
                 } else {
                     //print_r($insertGroup);
                     // Error while inserting data in group table
-                    echo "Error here: " . $insertGroup . "<br>" . mysqli_error($connection);
+                    echo'<script>
+                    document.getElementById("modal-error-text").innerText="Error while inserting data in group table";
+                    $("#error-modal").modal()
+                </script>'; 
                 }
                 
             }
@@ -933,7 +961,10 @@ if (isset($_POST["profile-submit"])) {
                 $GroupCheckerresult = mysqli_query($connection, $GroupChecker);
                 // Insert or Update Group table
                 if(mysqli_num_rows($GroupCheckerresult)>0){
-                    echo "Cannot Update Group Details";
+                    echo'<script>
+                               document.getElementById("modal-error-text").innerText="Error while updating group records";
+                               $("#error-modal").modal()
+                           </script>';
                     //$count=$count+1;
                     //$insertGroup="UPDATE `group_details` SET  `group_member_count`='". $count."', `guide_id`'". $guideRow['guide_id']."' WHERE `group_member_ids`='".$group_member_ids."'";
                 }else{
@@ -947,11 +978,17 @@ if (isset($_POST["profile-submit"])) {
                             $updateStudent="UPDATE `student` SET `group_id`='". $newGroupId ."',`guide_id`='". $guideRow['guide_id'] ."' WHERE `student_id` IN('". $value[0] ."','". $value[1] ."','". $value[2] ."')";
                         }
                         else{
-                            echo"Error in updating groups";
+                            echo'<script>
+                               document.getElementById("modal-error-text").innerText="Error while updating group records";
+                               $("#error-modal").modal()
+                           </script>';
                         }
                    } else {
                        // Error while inserting data in group table
-                       echo "Error: " . $insertGroup . "<br>" . mysqli_error($connection);
+                       echo'<script>
+                               document.getElementById("modal-error-text").innerText="Error while updating inserting records";
+                               $("#error-modal").modal()
+                           </script>';
                    } 
                 }
                 
@@ -1005,10 +1042,16 @@ if (isset($_POST["profile-submit"])) {
                                     // location.href="./index.php?action=success&id='.$userID.'";
                                     // </script>';
                                 }else{
-                                    echo"Error in updating group";
+                                    echo'<script>
+                                            document.getElementById("modal-error-text").innerText="Error while updating group";
+                                            $("#error-modal").modal()
+                                        </script>';
                                 }
                             }else{
-                                echo("Error in updating project");
+                                echo'<script>
+                               document.getElementById("modal-error-text").innerText="Error while updating project details";
+                               $("#error-modal").modal()
+                           </script>';
                             }
                             
                         } else {
@@ -1045,10 +1088,16 @@ if (isset($_POST["profile-submit"])) {
                                     //     location.href="./index.php?action=success&id='.$userID.'";
                                     //     </script>';
                                 }else{
-                                    echo"Error in updating group";
+                                   echo'<script>
+                                           document.getElementById("modal-error-text").innerText="Error while updating group records";
+                                           $("#error-modal").modal()
+                                       </script>';
                                 }
                             }else{
-                                echo("Error in updating project");
+                                echo'<script>
+                                        document.getElementById("modal-error-text").innerText="Error while updating project records";
+                                        $("#error-modal").modal()
+                                    </script>';
                             }
                             
                         } else {
@@ -1058,7 +1107,10 @@ if (isset($_POST["profile-submit"])) {
                     }
                 // }
             }else {
-                echo "Error updating record:";
+                echo'<script>
+                        document.getElementById("modal-error-text").innerText="Error while updating records";
+                        $("#error-modal").modal()
+                    </script>';
             }
         }else{
             $ProjectChecker="SELECT  `project_id` FROM `project` WHERE `group_id`='". $studentDetails['group_id'] ."'";
